@@ -221,7 +221,6 @@ class _HomePageState extends State<HomePage> {
                                   children: [
                                     Text(controller.profiles[index].name),
                                     Text(controller.profiles[index].IU),
-                                    Text(controller.profiles[index].branch),
                                     Text(controller.profiles[index].sem.toString()),
                                     Text(controller.profiles[index].cgpa.toString()),
                                   ],

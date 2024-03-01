@@ -3,6 +3,7 @@ import 'package:get/get.dart';
 import 'package:placed_web/modules/home_module/view/home_page.dart';
 import 'package:placed_web/page_bindings/bindings.dart';
 
+import 'modules/password_recovery/password_recovery.dart';
 import 'page_bindings/page_bindings.dart';
 
 void main() {
