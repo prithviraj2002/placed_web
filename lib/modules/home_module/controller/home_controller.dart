@@ -27,7 +27,7 @@ class HomeController extends GetxController {
     }
   }
 
-  Future<void> exportToExcel() async {
+   void exportToExcel() {
     var excel = Excel.createExcel();
     var sheet = excel['Master Data'];
     List<TextCellValue> dataRow = [];
@@ -38,19 +38,18 @@ class HomeController extends GetxController {
       const TextCellValue('Email'),
       const TextCellValue('Branch'),
       const TextCellValue('Semester'),
-      const TextCellValue('CGPA')
+      const TextCellValue('CGPA'),
     ]);
 
     for (var profile in profiles) {
       for(String value in profile.toList()){
         dataRow.add(TextCellValue(value));
-        print(dataRow);
       }
       sheet.appendRow(dataRow);
       dataRow = [];
     }
 
-    await excel.save(fileName: 'student_master_data.xlsx');
+    excel.save(fileName: 'student_master_data.xlsx');
   }
 
   void listenToProfiles() {

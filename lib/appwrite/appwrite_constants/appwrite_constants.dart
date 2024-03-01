@@ -5,4 +5,6 @@ class AppWriteConstants{
   //Database
   static const String dbID = '65ab73cee9265f8b049b';
   static const String profileCollectionsId = '65ab73eec953f243cdac';
+  static const String broadcastCollectionsId = '65aca87fbf43f6aef2bb';
+  static const String jobsCollectionId = '65ad06fdc3b55e37ae8b';
 }
