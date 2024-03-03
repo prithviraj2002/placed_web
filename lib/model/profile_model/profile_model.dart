@@ -1,6 +1,7 @@
+import 'package:uuid/uuid.dart';
+
 class Profile {
   String name;
-  String id;
   String email;
   String dateOfBirth;
   String IU;
@@ -23,10 +24,14 @@ class Profile {
   int activeBackLog;
   int totalBackLog;
   String address;
+  List<dynamic>? appliedJobs;
+  String? githubProfile;
+  String? linkedinProfile;
+  String? otherLink;
+  bool status;
 
   Profile({
     required this.name,
-    required this.id,
     required this.email,
     required this.dateOfBirth,
     required this.IU,
@@ -48,34 +53,44 @@ class Profile {
     required this.cgpa,
     required this.activeBackLog,
     required this.totalBackLog,
-    required this.address
+    required this.address,
+    this.appliedJobs,
+    this.githubProfile,
+    this.linkedinProfile,
+    this.otherLink,
+    required this.status,
   });
 
   factory Profile.fromJson(Map<String, dynamic> json){
     return Profile(name: json['name'],
-        id: json['id'] ?? '',
-        email: json['email'],
-        dateOfBirth: json['dateOfBirth'],
-        IU: json['IU'],
-        phoneNumber: json['IU'],
-        course: json['IU'],
-        degree: json['degree'],
-        year: json['year'],
-        sem: json['sem'],
-        XMarks: json['XMarks'],
-        XPassingYear: json['XPassingYear'],
-        XIIMarks: json['XIIMarks'] ?? '',
-        XIIPassingYear: json['XIIPassingYear'] ?? '',
-        diplomaBranch: json['diplomaBranch'] ?? '',
-        diplomaMarks: json['diplomaMarks'] ?? 0.0,
-        diplomaPassingYear: json['diplomaPassingYear'] ?? '',
-        gender: json['gender'],
-        board: json['board'],
-        engYearOfPassing: json['engYearOfPassing'],
-        cgpa: json['cgpa'],
-        activeBackLog: json['activeBackLog'],
-        totalBackLog: json['totalBackLog'],
-        address: json['address']);
+      email: json['email'],
+      dateOfBirth: json['dateOfBirth'],
+      IU: json['IU'],
+      phoneNumber: json['IU'],
+      course: json['IU'],
+      degree: json['degree'],
+      year: json['year'],
+      sem: json['sem'],
+      XMarks: double.parse(json['XMarks'].toString()),
+      XPassingYear: json['XPassingYear'],
+      XIIMarks: double.parse(json['XIIMarks'].toString()) ?? 0.0,
+      XIIPassingYear: json['XIIPassingYear'] ?? '',
+      diplomaBranch: json['diplomaBranch'] ?? '',
+      diplomaMarks: double.parse(json['diplomaMarks'].toString()) ?? 0.0,
+      diplomaPassingYear: json['diplomaPassingYear'] ?? '',
+      gender: json['gender'],
+      board: json['board'],
+      engYearOfPassing: json['engYearOfPassing'],
+      cgpa: json['cgpa'],
+      activeBackLog: json['activeBackLog'],
+      totalBackLog: json['totalBackLog'],
+      address: json['address'],
+      appliedJobs: json['appliedJobs'] ?? [''],
+      linkedinProfile: json['linkedinProfile'] ?? '',
+      githubProfile: json['githubProfile'] ?? '',
+      otherLink: json['otherLink'] ?? '',
+      status: json['status'] ?? true,
+    );
   }
 
   Map<String, dynamic> toMap(){
@@ -102,12 +117,19 @@ class Profile {
       'XIIPassingYear' : XIIPassingYear ?? 0.0,
       'diplomaBranch' : diplomaBranch ?? '',
       'diplomaPassingYear': diplomaPassingYear ?? '',
-      'diplomaMarks': diplomaMarks ?? 0.0
+      'diplomaMarks': diplomaMarks ?? 0.0,
+      'appliedJobs' : appliedJobs ?? [],
+      'linkedinProfile': linkedinProfile,
+      'githubProfile': githubProfile,
+      'otherLink': otherLink,
+      'status': status,
     };
   }
 
   List<String> toList(){
-    return [name, IU, email, sem.toString(), cgpa.toString(), ];
+    return [
+      name.toString(), email.toString(), dateOfBirth.toString(), IU.toString(), phoneNumber.toString()
+    ];
   }
 
 }

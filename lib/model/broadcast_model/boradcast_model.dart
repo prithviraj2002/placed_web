@@ -1,23 +1,28 @@
-class BroadCastMessage {
-  final String message;
-  final String jobId;
-  final String timeAndDate;
+import 'package:flutter/material.dart';
 
-  BroadCastMessage(
-      {required this.message, required this.jobId, required this.timeAndDate});
+class BroadcastMessage{
+  String message;
+  String date;
+  String time;
+  String jobId;
 
-  factory BroadCastMessage.fromJson(Map<String, dynamic> json) {
-    return BroadCastMessage(
-        message: json['title'],
-        jobId: json['desc'],
-        timeAndDate: json['timeAndDate']);
+  BroadcastMessage({
+    required this.message,
+    required this.date,
+    required this.time,
+    required this.jobId,
+  });
+
+  factory BroadcastMessage.fromJson(Map<String, dynamic> json){
+    return BroadcastMessage(message: json['message'], date: json['date'], time: json['time'], jobId: json['jobId']);
   }
 
   Map<String, dynamic> toMap(){
-    return{
+    return {
       'message': message,
+      'date': date,
+      'time': time,
       'jobId': jobId,
-      'timeAndDate': timeAndDate
     };
   }
 }

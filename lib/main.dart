@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:placed_web/modules/home_module/view/home.dart';
 import 'package:placed_web/modules/home_module/view/home_page.dart';
 import 'package:placed_web/page_bindings/bindings.dart';
 
@@ -39,7 +40,7 @@ class MyApp extends StatelessWidget {
         colorScheme: ColorScheme.fromSeed(seedColor: Colors.blue),
         useMaterial3: true,
       ),
-      home: const HomePage(),
+      home: const Home(),
     );
   }
 }
