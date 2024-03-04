@@ -23,7 +23,7 @@ class HomeController extends GetxController {
     DocumentList listOfProfiles;
     listOfProfiles = await AppWriteDb.getProfilesFromDB();
     for (Document d in listOfProfiles.documents) {
-      profiles.add(Profile.fromJson(d.data));
+      profiles.add(Profile.fromJson(d.data, d.$id));
     }
   }
 
@@ -62,7 +62,7 @@ class HomeController extends GetxController {
         .listen((event) {
           if (event.events.contains(
               "databases.${AppWriteConstants.dbID}.collections.${AppWriteConstants.profileCollectionsId}.documents.*.create")) {
-            profiles.add(Profile.fromJson(event.payload));
+            profiles.add(Profile.fromJson(event.payload, event.payload["\$id"]));
           } else if (event.events.contains(
               "databases.${AppWriteConstants.dbID}.collections.${AppWriteConstants.profileCollectionsId}.documents.*.create")) {
             getProfiles();

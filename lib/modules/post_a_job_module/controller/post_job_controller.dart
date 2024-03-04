@@ -1,5 +1,6 @@
 import 'package:get/get.dart';
 import 'package:placed_web/appwrite/appwrite_db/appwrite_db.dart';
+import 'package:placed_web/model/broadcast_model/boradcast_model.dart';
 import 'package:placed_web/model/job_model/job_model.dart';
 import 'package:placed_web/modules/jobs/controller/job_controller.dart';
 import 'package:uuid/uuid.dart';
@@ -49,5 +50,16 @@ class PostJobController extends GetxController{
     jobController.jobs.add(jobPost);
     AppWriteDb.createJobCollection(jobPost);
     AppWriteDb.createJob(jobPost);
+    sendSystemGenMsg(randomId, companyName.value);
+  }
+
+  void sendSystemGenMsg(String jobId, String companyName){
+    final BroadcastMessage msg = BroadcastMessage(
+        message: '$companyName invites your application! This is a system generated announcement. You will receive all the announcements from T&P department here.',
+        date: DateTime.now().toString(),
+        time: DateTime.now().toString(),
+        jobId: jobId
+    );
+    AppWriteDb.sendBroadCastMessage(msg);
   }
 }

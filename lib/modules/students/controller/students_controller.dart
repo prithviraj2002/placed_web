@@ -1,36 +1,24 @@
 import 'dart:async';
 
 import 'package:appwrite/appwrite.dart';
+import 'package:appwrite/models.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:placed_web/appwrite/appwrite_constants/appwrite_constants.dart';
 import 'package:placed_web/appwrite/appwrite_db/appwrite_db.dart';
-import 'package:placed_web/model/broadcast_model/boradcast_model.dart';
 import 'package:placed_web/model/profile_model/profile_model.dart';
 
-class JobDetailController extends GetxController{
-  
+class StudentsController extends GetxController{
+
   RxList<Profile> profiles = <Profile>[].obs;
-  RxList<BroadcastMessage> announcements = <BroadcastMessage>[].obs;
   late StreamSubscription<RealtimeMessage> subscription;
-  String jobId = '';
 
   @override
   void onInit() {
     // TODO: implement onInit
     super.onInit();
-  }
-
-  @override
-  void onReady() {
-    // TODO: implement onReady
-    super.onReady();
+    getAllProfiles();
     listenToProfiles();
-  }
-
-  void getProfiles(String jobId) async{
-    profiles.value = await AppWriteDb.getProfilesFromJobId(jobId);
-    jobId = jobId;
   }
 
   List<DataRow> getDataRow() {
@@ -57,35 +45,33 @@ class JobDetailController extends GetxController{
     return dataRow;
   }
 
+  Future<void> getAllProfiles() async{
+    final DocumentList profileList = await AppWriteDb.getProfilesFromDB();
+    for(var doc in profileList.documents){
+      profiles.add(Profile.fromJson(doc.data, doc.$id));
+    }
+  }
+
   void listenToProfiles(){
     final realtime = Realtime(AppWriteDb.client);
     subscription = realtime
         .subscribe([
-      "databases.${AppWriteConstants.dbID}.collections.${jobId}.documents"
+      "databases.${AppWriteConstants.dbID}.collections.${AppWriteConstants.profileCollectionsId}.documents"
     ])
         .stream
         .listen((event) {
       if (event.events.contains(
-          "databases.${AppWriteConstants.dbID}.collections.${jobId}.documents.*.create")) {
-        getProfiles(jobId);
+          "databases.${AppWriteConstants.dbID}.collections.${AppWriteConstants.profileCollectionsId}.documents.*.create")) {
+        getAllProfiles();
       } else if (event.events.contains(
-          "databases.${AppWriteConstants.dbID}.collections.${jobId}.documents.*.delete")) {
-        getProfiles(jobId);
+          "databases.${AppWriteConstants.dbID}.collections.${AppWriteConstants.profileCollectionsId}.documents.*.delete")) {
+        getAllProfiles();
       }
     });
   }
 
   void stopListeningToProfiles(){
     subscription.cancel();
-  }
-
-  Future<void> getAnnouncements(String jobId) async{
-    announcements.value = await AppWriteDb.getBroadCastMessagesById(jobId);
-  }
-
-  void sendAnnouncement(BroadcastMessage msg){
-    announcements.add(msg);
-    AppWriteDb.sendBroadCastMessage(msg);
   }
 
   @override

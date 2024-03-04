@@ -40,7 +40,7 @@ class AppWriteDb {
       final response = await databases.listDocuments(
           databaseId: AppWriteConstants.dbID, collectionId: jobId);
       for(var profile in response.documents){
-        profiles.add(Profile.fromJson(profile.data));
+        profiles.add(Profile.fromJson(profile.data, profile.$id));
       }
       return profiles;
     } on AppwriteException catch (e) {
@@ -97,6 +97,26 @@ class AppWriteDb {
           data: msg.toMap());
       return response;
     } on AppwriteException catch (e) {
+      rethrow;
+    }
+  }
+
+  static Future<List<BroadcastMessage>> getBroadCastMessagesById(String id) async{
+    final List<BroadcastMessage> msgs = [];
+    try{
+      final response = await databases.listDocuments(
+          databaseId: AppWriteConstants.dbID,
+          collectionId: AppWriteConstants.broadcastCollectionsId,
+        queries: [
+          Query.equal('jobId', id)
+        ]
+      );
+      for(var msg in response.documents){
+        msgs.add(BroadcastMessage.fromJson(msg.data));
+      }
+      return msgs;
+    } on AppwriteException catch(e){
+      print('An error occurred while getting broad cast messages!: $e');
       rethrow;
     }
   }
