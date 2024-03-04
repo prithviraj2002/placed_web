@@ -6,6 +6,7 @@ import 'package:placed_web/modules/jobs/view/jobs.dart';
 import 'package:placed_web/modules/overview/view/overview.dart';
 import 'package:placed_web/modules/post_a_job_module/view/post_a_job.dart';
 import 'package:placed_web/modules/students/view/students.dart';
+import 'package:placed_web/modules/students/view/students_page.dart';
 
 class Home extends StatefulWidget {
   const Home({super.key});
@@ -37,7 +38,7 @@ class _HomeState extends State<Home> {
       return Overview();
     }
     else if(index == 1){
-      return Students();
+      return StudentsPage();
     }
     else if(index == 2){
       return Jobs();

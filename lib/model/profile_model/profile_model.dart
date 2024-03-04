@@ -2,6 +2,7 @@ import 'package:uuid/uuid.dart';
 
 class Profile {
   String name;
+  String id;
   String email;
   String dateOfBirth;
   String IU;
@@ -32,6 +33,7 @@ class Profile {
 
   Profile({
     required this.name,
+    required this.id,
     required this.email,
     required this.dateOfBirth,
     required this.IU,
@@ -61,17 +63,18 @@ class Profile {
     required this.status,
   });
 
-  factory Profile.fromJson(Map<String, dynamic> json){
+  factory Profile.fromJson(Map<String, dynamic> json, String id){
     return Profile(name: json['name'],
+      id: id,
       email: json['email'],
       dateOfBirth: json['dateOfBirth'],
       IU: json['IU'],
-      phoneNumber: json['IU'],
-      course: json['IU'],
+      phoneNumber: json['phoneNumber'],
+      course: json['course'],
       degree: json['degree'],
       year: json['year'],
       sem: json['sem'],
-      XMarks: double.parse(json['XMarks'].toString()),
+      XMarks: double.parse(json['XMarks'].toString() ?? '0.0'),
       XPassingYear: json['XPassingYear'],
       XIIMarks: double.parse(json['XIIMarks'].toString()) ?? 0.0,
       XIIPassingYear: json['XIIPassingYear'] ?? '',
