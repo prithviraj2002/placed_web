@@ -67,6 +67,22 @@ class AppWriteDb {
     }
   }
 
+  //To update job post details
+  static Future<Document> updateJob(JobPost jobPost) async{
+    try{
+      final response = await databases.updateDocument(
+          databaseId: AppWriteConstants.dbID,
+          collectionId: AppWriteConstants.jobsCollectionId,
+          documentId: jobPost.jobId,
+        data: jobPost.toMap()
+      );
+      return response;
+    } on AppwriteException catch(e){
+      print('An error occurred while updating job in appwrite db!');
+      rethrow;
+    }
+  }
+
   //del a job
   static Future<dynamic> delJob(JobPost jobPost) async {
     try {

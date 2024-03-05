@@ -14,6 +14,8 @@ class JobDetailController extends GetxController{
   RxList<BroadcastMessage> announcements = <BroadcastMessage>[].obs;
   late StreamSubscription<RealtimeMessage> subscription;
   String jobId = '';
+  bool isLoading = true;
+  Rx<bool> isExpanded = false.obs;
 
   @override
   void onInit() {
@@ -30,6 +32,7 @@ class JobDetailController extends GetxController{
 
   void getProfiles(String jobId) async{
     profiles.value = await AppWriteDb.getProfilesFromJobId(jobId);
+    isLoading = false;
     jobId = jobId;
   }
 

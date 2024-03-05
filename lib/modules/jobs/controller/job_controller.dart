@@ -5,6 +5,7 @@ import 'package:placed_web/model/job_model/job_model.dart';
 
 class JobController extends GetxController{
   RxList<JobPost> jobs = <JobPost>[].obs;
+  bool isLoading = true;
 
   @override
   void onInit() {
@@ -15,5 +16,6 @@ class JobController extends GetxController{
 
   Future<void> getAllJobs() async{
     jobs.value = await AppWriteDb.getAllJobs();
+    isLoading = false;
   }
 }
