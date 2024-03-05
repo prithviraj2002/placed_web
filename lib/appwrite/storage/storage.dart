@@ -20,7 +20,7 @@ class AppwriteStorage{
   static Future<File> uploadLogo(String imagePath, JobPost jobPost) async {
     try {
       final response = await storage.createFile(
-          bucketId: AppWriteConstants.logosBucketId,
+          bucketId: AppWriteConstants.departmentBucketId,
           fileId: jobPost.jobId,
           file: InputFile.fromPath(path: imagePath, filename: '${jobPost.companyName} - logo'));
       return response;
@@ -47,7 +47,7 @@ class AppwriteStorage{
   }
 
   static String getLogoViewUrl(String fileId){
-    return '${AppWriteConstants.apiEndPoint}/storage/buckets/${AppWriteConstants.logosBucketId}/files/$fileId/view?project=${AppWriteConstants.projectId}&mode=admin';
+    return '${AppWriteConstants.apiEndPoint}/storage/buckets/${AppWriteConstants.departmentBucketId}/files/$fileId/view?project=${AppWriteConstants.projectId}&mode=admin';
   }
 
   static String getImageViewUrl(String fileId){

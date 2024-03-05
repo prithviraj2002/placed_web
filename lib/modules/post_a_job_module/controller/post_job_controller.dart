@@ -1,8 +1,12 @@
+import 'dart:io';
+
+import 'package:file_picker/file_picker.dart';
 import 'package:get/get.dart';
 import 'package:placed_web/appwrite/appwrite_db/appwrite_db.dart';
 import 'package:placed_web/model/broadcast_model/boradcast_model.dart';
 import 'package:placed_web/model/job_model/job_model.dart';
 import 'package:placed_web/modules/jobs/controller/job_controller.dart';
+import 'package:placed_web/utils/utils.dart';
 import 'package:uuid/uuid.dart';
 
 class PostJobController extends GetxController{
@@ -16,17 +20,23 @@ class PostJobController extends GetxController{
   Rx<String> endDate = ''.obs;
   Rx<String> desc = ''.obs;
   Rx<String> uploadDocs = ''.obs;
+  Rx<String> imagePath = ''.obs;
+  Rx<PlatformFile> selectedFile = PlatformFile(name: fileName.value, size: fileSize.value).obs;
+  static Rx<String> fileName = ''.obs;
+  static Rx<int> fileSize = 0.obs;
 
   JobController jobController = Get.find<JobController>();
 
   //To upload logo of the company
-  void uploadPhoto() {
-
+  Future<void> uploadPhoto() async{
+    imagePath.value = await Utils.pickLogo();
   }
 
   //To upload pdf docs
-  void uploadDocuments() {
-
+  Future<void> uploadDocuments() async{
+    selectedFile.value = (await Utils.pickDocs())!;
+    fileName.value = selectedFile.value.name;
+    fileSize.value = selectedFile.value.size;
   }
 
   String generateRandomId(){

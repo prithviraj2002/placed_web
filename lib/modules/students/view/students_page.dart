@@ -16,10 +16,10 @@ class StudentsPage extends StatelessWidget {
         title: Text('Students', style: TextStyle(fontWeight: FontWeight.bold, fontSize: 20),),
       ),
       body: Obx(() {
-        if(controller.profiles.isEmpty){
+        if(controller.profiles.isEmpty && !controller.isLoading){
           return const Center(child: Text('No profiles yet!'));
         }
-        else if(controller.profiles.isNotEmpty){
+        else if(controller.profiles.isNotEmpty && !controller.isLoading){
           return Container(
             padding: const EdgeInsets.symmetric(vertical: 20, horizontal: 20),
             child: SingleChildScrollView(
@@ -168,7 +168,10 @@ class StudentsPage extends StatelessWidget {
               ),
             ),
           );
-        } else {
+        } else if(controller.isLoading) {
+          return const Center(child: CircularProgressIndicator(),);
+        }
+        else{
           return const Center(child: CircularProgressIndicator(),);
         }
       }),

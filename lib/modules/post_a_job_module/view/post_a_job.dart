@@ -5,6 +5,7 @@ import 'package:placed_web/constants/app-ui/placed_strings.dart';
 import 'package:placed_web/model/job_model/job_model.dart';
 import 'package:placed_web/modules/post_a_job_module/controller/post_job_controller.dart';
 import 'package:intl/intl.dart';
+import 'package:placed_web/utils/utils.dart';
 
 class PostJob extends StatefulWidget {
   const PostJob({super.key});
@@ -83,10 +84,20 @@ class _PostJobState extends State<PostJob> {
                   mainAxisSize: MainAxisSize.max,
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: <Widget>[
-                    OutlinedButton(onPressed: () {},
+                    OutlinedButton(onPressed: () {
+                      controller.uploadPhoto();
+                    },
                         child: const Text(PlacedStrings.uploadLogo)),
                     const SizedBox(height: 10,),
-                    const Text('PNG, JPG and JPEG are supported')
+                    Obx(() =>
+                    controller.imagePath.isNotEmpty ? Container(
+                      height: 50,
+                      width: 50,
+                      decoration: BoxDecoration(shape: BoxShape.circle),
+                      child: Image.network(
+                        controller.imagePath.value, scale: 10,),
+                    ) : Container()),
+                    const Text('PNG, JPG and JPEG are supported'),
                   ],),
                 ),
               ),
@@ -277,14 +288,24 @@ class _PostJobState extends State<PostJob> {
               Text(PlacedStrings.uploadDocs,
                 style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),),
               const SizedBox(height: 20,),
-              Expanded(
-                  child: TextFormField(
-                    controller: uploadDocs,
-                    decoration: const InputDecoration(
-                        border: OutlineInputBorder(),
-                        hintText: 'Selected Documents (PDF, JPG, PNG, supported)'
-                    ),
-                  )
+              InkWell(
+                onTap: () {
+                  controller.uploadDocuments();
+                  uploadDocs = TextEditingController(
+                      text: controller.selectedFile.value.path);
+                },
+                child: Expanded(
+                    child: Obx(() {
+                      return TextFormField(
+                        enabled: false,
+                        controller: uploadDocs,
+                        decoration: InputDecoration(
+                            border: OutlineInputBorder(),
+                            hintText: controller.selectedFile.value.name.isEmpty ? 'Select Documents (PDF, JPG, PNG supported)' : '${controller.selectedFile.value.name} file selected',
+                        ),
+                      );
+                    })
+                ),
               ),
               const SizedBox(height: 20,),
               Row(
@@ -304,8 +325,10 @@ class _PostJobState extends State<PostJob> {
                             controller.jobType.value = jobType.text;
                             controller.jobLocation.value = jobLocation.text;
                             controller.endDate.value = lastDateToApply.text;
-                            controller.packageEndRange.value = packageEndRange.text;
-                            controller.packageStarterRange.value = packageStartRange.text;
+                            controller.packageEndRange.value = packageEndRange
+                                .text;
+                            controller.packageStarterRange.value =
+                                packageStartRange.text;
                             controller.desc.value = descriptionController.text;
                             controller.createJobPost();
                           }
@@ -332,3 +355,5 @@ class _PostJobState extends State<PostJob> {
     );
   }
 }
+
+

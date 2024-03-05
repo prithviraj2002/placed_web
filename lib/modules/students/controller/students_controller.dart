@@ -12,6 +12,7 @@ class StudentsController extends GetxController{
 
   RxList<Profile> profiles = <Profile>[].obs;
   late StreamSubscription<RealtimeMessage> subscription;
+  bool isLoading = true;
 
   @override
   void onInit() {
@@ -50,6 +51,7 @@ class StudentsController extends GetxController{
     for(var doc in profileList.documents){
       profiles.add(Profile.fromJson(doc.data, doc.$id));
     }
+    isLoading = false;
   }
 
   void listenToProfiles(){
