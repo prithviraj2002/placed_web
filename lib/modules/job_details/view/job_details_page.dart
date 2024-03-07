@@ -19,6 +19,7 @@ class JobDetails extends StatefulWidget {
 
 class _JobDetailsState extends State<JobDetails> {
   JobDetailController controller = Get.find<JobDetailController>();
+  TextEditingController searchController = TextEditingController();
 
   @override
   void initState() {
@@ -26,6 +27,13 @@ class _JobDetailsState extends State<JobDetails> {
     super.initState();
     controller.getProfiles(widget.jobPost.jobId);
     controller.getAnnouncements(widget.jobPost.jobId);
+  }
+
+  @override
+  void dispose() {
+    // TODO: implement dispose
+    super.dispose();
+    searchController.dispose();
   }
 
   @override
@@ -62,7 +70,9 @@ class _JobDetailsState extends State<JobDetails> {
                               child: TextFormField(
                                 decoration: InputDecoration(
                                   prefix: InkWell(
-                                    onTap: () {},
+                                    onTap: () {
+                                      controller.search = true;
+                                    },
                                     child: const Icon(Icons.search),
                                   ),
                                   hintText: PlacedStrings.searchTableHintText,
@@ -122,7 +132,7 @@ class _JobDetailsState extends State<JobDetails> {
                                   color:
                                   const Color(PlacedColors.primaryBlue),
                                   borderRadius: BorderRadius.circular(5)),
-                              child: Row(
+                              child: const Row(
                                 mainAxisAlignment: MainAxisAlignment.center,
                                 children: [
                                   Icon(Icons.add, color: Colors.white,),
@@ -169,8 +179,9 @@ class _JobDetailsState extends State<JobDetails> {
                       scrollDirection: Axis.horizontal,
                       child: DataTable(
                           dividerThickness: 0.00000000001,
-                          columns: [
+                          columns: const [
                             DataColumn(label: Text('SR.NO')),
+                            DataColumn(label: Text('Profile')),
                             DataColumn(label: Text('Name')),
                             DataColumn(label: Text('Email')),
                             DataColumn(label: Text('Date of Birth')),
@@ -179,9 +190,12 @@ class _JobDetailsState extends State<JobDetails> {
                             DataColumn(label: Text('Course')),
                             DataColumn(label: Text('Degree')),
                             DataColumn(label: Text('Year')),
-                            DataColumn(label: Text('Semester'))
+                            DataColumn(label: Text('Semester')),
+                            DataColumn(label: Text('Resume'))
                           ],
-                          rows: controller.getDataRow()),
+                          rows: controller.search && searchController.text.isNotEmpty ? controller.searchData(searchController.text)
+                              : controller.getDataRow(),
+                      ),
                     ),
                   ),
                 ],
@@ -189,8 +203,8 @@ class _JobDetailsState extends State<JobDetails> {
             ),
           )
               : controller.isLoading
-              ? Center(child: CircularProgressIndicator())
-              : Center(
+              ? const Center(child: CircularProgressIndicator())
+              : const Center(
             child: Text(
               'No Applications yet!',
               style:
@@ -214,12 +228,3 @@ class _JobDetailsState extends State<JobDetails> {
   }
 }
 
-// ListView.separated(itemBuilder: (ctx, index){
-// return Card(
-// child: ListTile(
-// title: Text(controller.profiles[index].name),
-// ),
-// );
-// }, separatorBuilder: (ctx, index){
-// return const SizedBox(height: 10,);
-// }, itemCount: controller.profiles.length)

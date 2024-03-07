@@ -131,7 +131,11 @@ class Profile {
 
   List<String> toList(){
     return [
-      name.toString(), email.toString(), dateOfBirth.toString(), IU.toString(), phoneNumber.toString()
+      name.toString(), email.toString(), dateOfBirth.toString(), IU.toString(), phoneNumber.toString(), course.toString(),
+      degree.toString(), year.toString(), sem.toString(), XMarks.toString(), XPassingYear.toString(), gender.toString(), board.toString(),
+      engYearOfPassing.toString(), cgpa.toString(), activeBackLog.toString(), totalBackLog.toString(), address.toString(), XIIMarks.toString(),
+      XIIPassingYear.toString(), diplomaBranch.toString(), diplomaPassingYear.toString(), diplomaMarks.toString(), appliedJobs.toString(), linkedinProfile.toString(),
+      githubProfile.toString(), otherLink.toString(), status.toString()
     ];
   }
 

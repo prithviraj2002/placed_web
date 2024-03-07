@@ -1,6 +1,7 @@
 import 'package:appwrite/appwrite.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:placed_web/appwrite/storage/storage.dart';
 import 'package:placed_web/constants/app-ui/placed_strings.dart';
 import 'package:placed_web/model/job_model/job_model.dart';
 import 'package:placed_web/modules/post_a_job_module/controller/post_job_controller.dart';
@@ -90,12 +91,12 @@ class _PostJobState extends State<PostJob> {
                         child: const Text(PlacedStrings.uploadLogo)),
                     const SizedBox(height: 10,),
                     Obx(() =>
-                    controller.imagePath.isNotEmpty ? Container(
+                    controller.selectedPhoto.value!.name.isNotEmpty ? Container(
                       height: 50,
                       width: 50,
                       decoration: BoxDecoration(shape: BoxShape.circle),
                       child: Image.network(
-                        controller.imagePath.value, scale: 10,),
+                        controller.selectedPhoto.value!.path, scale: 10,),
                     ) : Container()),
                     const Text('PNG, JPG and JPEG are supported'),
                   ],),
@@ -240,8 +241,19 @@ class _PostJobState extends State<PostJob> {
               Text(PlacedStrings.lastDateToApply,
                 style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),),
               const SizedBox(height: 20,),
-              Expanded(
+              InkWell(
+                onTap: () async{
+                  var currentDate = DateTime.now();
+                  controller.selectedDate.value = (await showDatePicker(context: context,
+                      firstDate: DateTime.now(),
+                      lastDate: currentDate.add(Duration(days: 10 * 365))))!;
+                  setState(() {
+                    lastDateToApply = TextEditingController(text: controller.selectedDate.string.substring(0,10));
+                  });
+                },
+                child: Expanded(
                   child: TextFormField(
+                    enabled: false,
                     controller: lastDateToApply,
                     decoration: const InputDecoration(
                         border: OutlineInputBorder(),
@@ -253,7 +265,8 @@ class _PostJobState extends State<PostJob> {
                       }
                       return null;
                     },
-                  )
+                  ),
+                ),
               ),
               const SizedBox(height: 20,),
               Text(PlacedStrings.additionalDescription,
@@ -297,11 +310,15 @@ class _PostJobState extends State<PostJob> {
                 child: Expanded(
                     child: Obx(() {
                       return TextFormField(
+                        readOnly: true,
                         enabled: false,
                         controller: uploadDocs,
                         decoration: InputDecoration(
-                            border: OutlineInputBorder(),
-                            hintText: controller.selectedFile.value.name.isEmpty ? 'Select Documents (PDF, JPG, PNG supported)' : '${controller.selectedFile.value.name} file selected',
+                          border: OutlineInputBorder(),
+                          hintText: controller.selectedFile.value.name.isEmpty
+                              ? 'Select Documents (PDF, JPG, PNG supported)'
+                              : '${controller.selectedFile.value
+                              .name} file selected',
                         ),
                       );
                     })

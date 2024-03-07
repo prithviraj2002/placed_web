@@ -1,8 +1,11 @@
 import 'dart:io';
+import 'dart:typed_data';
 
 import 'package:file_picker/file_picker.dart';
 import 'package:get/get.dart';
+import 'package:image_picker/image_picker.dart';
 import 'package:placed_web/appwrite/appwrite_db/appwrite_db.dart';
+import 'package:placed_web/appwrite/storage/storage.dart';
 import 'package:placed_web/model/broadcast_model/boradcast_model.dart';
 import 'package:placed_web/model/job_model/job_model.dart';
 import 'package:placed_web/modules/jobs/controller/job_controller.dart';
@@ -18,9 +21,12 @@ class PostJobController extends GetxController{
   Rx<String> packageStarterRange = ''.obs;
   Rx<String> packageEndRange = ''.obs;
   Rx<String> endDate = ''.obs;
+  Rx<DateTime> selectedDate = DateTime.now().obs;
   Rx<String> desc = ''.obs;
   Rx<String> uploadDocs = ''.obs;
-  Rx<String> imagePath = ''.obs;
+  static Rx<String> imagePath = ''.obs;
+  Rx<Uint8List> bytes = Uint8List(0).obs;
+  Rx<XFile?> selectedPhoto = XFile(imagePath.value).obs;
   Rx<PlatformFile> selectedFile = PlatformFile(name: fileName.value, size: fileSize.value).obs;
   static Rx<String> fileName = ''.obs;
   static Rx<int> fileSize = 0.obs;
@@ -29,7 +35,7 @@ class PostJobController extends GetxController{
 
   //To upload logo of the company
   Future<void> uploadPhoto() async{
-    imagePath.value = await Utils.pickLogo();
+    bytes.value = await Utils.pickLogo();
   }
 
   //To upload pdf docs
@@ -57,6 +63,8 @@ class PostJobController extends GetxController{
         jobLocation: jobLocation.value,
         filters: []
     );
+    AppwriteStorage.uploadFile(bytes.value, jobPost);
+    AppwriteStorage.uploadDoc(selectedFile.value, jobPost);
     jobController.jobs.add(jobPost);
     AppWriteDb.createJobCollection(jobPost);
     AppWriteDb.createJob(jobPost);
