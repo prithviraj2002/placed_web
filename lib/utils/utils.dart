@@ -1,4 +1,5 @@
 import 'dart:io';
+import 'dart:typed_data';
 
 import 'package:file_picker/_internal/file_picker_web.dart';
 import 'package:file_picker/file_picker.dart';
@@ -6,14 +7,15 @@ import 'package:image_picker/image_picker.dart';
 import 'package:image_picker_for_web/image_picker_for_web.dart';
 
 class Utils{
-  static Future<String> pickLogo() async{
+  static Future<Uint8List> pickLogo() async{
     final ImagePickerPlugin picker = ImagePickerPlugin();
     final XFile? image = await picker.getImageFromSource(source: ImageSource.gallery);
     if(image!.path.isNotEmpty){
-      return image.path;
+      final bytesOfFile = await image.readAsBytes();
+      return bytesOfFile;
     }
     else{
-      return '';
+      return Uint8List(0);
     }
   }
 
@@ -23,8 +25,12 @@ class Utils{
       allowedExtensions: ['pdf'],
     );
     if (result != null) {
-      return PlatformFile(name: result.files.first.name, size: result.files.first.size);
+      return result.files.first;
     }
     return null;
+  }
+
+  static String reverseString(String val){
+    return val.split('').reversed.join('');
   }
 }
