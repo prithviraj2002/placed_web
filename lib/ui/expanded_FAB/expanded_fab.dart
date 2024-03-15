@@ -1,9 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:placed_web/model/broadcast_model/boradcast_model.dart';
+import 'package:placed_web/constants/app-ui/placed_colors.dart';
 import 'package:placed_web/model/job_model/job_model.dart';
 import 'package:placed_web/modules/job_details/controller/job_details_controller.dart';
-import 'package:placed_web/ui/closed_FAB/closed_fab.dart';
+import 'package:placed_web/widgets/custom_message.dart';
+import 'package:placed_web/widgets/custom_message_withPDF.dart';
 
 class ExpandedFAB extends StatefulWidget {
   JobPost jobPost;
@@ -17,12 +18,30 @@ class ExpandedFAB extends StatefulWidget {
 class _ExpandedFABState extends State<ExpandedFAB> {
   TextEditingController messageController = TextEditingController();
   JobDetailController controller = Get.find<JobDetailController>();
+  ScrollController listController = ScrollController();
+
+  @override
+  void initState() {
+    super.initState();
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      _scrollToEnd();
+    });
+  }
+
+  void _scrollToEnd() {
+    listController.animateTo(
+      listController.position.maxScrollExtent,
+      duration: Duration(milliseconds: 500),
+      curve: Curves.easeOut,
+    );
+  }
 
   @override
   void dispose() {
     // TODO: implement dispose
     super.dispose();
     messageController.dispose();
+    listController.dispose();
   }
 
   @override
@@ -83,13 +102,28 @@ class _ExpandedFABState extends State<ExpandedFAB> {
                   children: [
                     Expanded(
                       child: ListView.separated(
+                        controller: listController,
                           shrinkWrap: true,
                           itemBuilder: (ctx, index) {
-                            return Container(
-                              color: Colors.black12,
-                              child: Text(
-                                  controller.announcements[index].message),
-                            );
+                            if (controller
+                                .announcements[index]
+                                .pdfUrl
+                                .isNotEmpty) {
+                              return CustomMessageWithPDF(
+                                text: controller
+                                    .announcements[index]
+                                    .message,
+                                pdfUrl: controller
+                                    .announcements[index]
+                                    .pdfUrl
+                              );
+                            } else {
+                              return CustomMessage(
+                                msgText: controller
+                                    .announcements[index]
+                                    .message,
+                              );
+                            }
                           },
                           separatorBuilder: (ctx, index) {
                             return const SizedBox(
@@ -122,18 +156,14 @@ class _ExpandedFABState extends State<ExpandedFAB> {
                           ),
                           IconButton(onPressed: () {
                             if (messageController.text.isNotEmpty) {
-                              final BroadcastMessage message = BroadcastMessage(
-                                  message: messageController.text,
-                                  date: DateTime.now().toIso8601String(),
-                                  time: DateTime.now().toIso8601String(),
-                                  jobId: widget.jobPost.jobId
-                              );
-                              controller.sendAnnouncement(message);
+                              controller.sendAnnouncement(messageController.text, widget.jobPost);
                               messageController.text = '';
                             }
                           }, icon: Icon(Icons.send)),
                           IconButton(
-                              onPressed: () {},
+                              onPressed: () {
+                                controller.uploadDocuments();
+                              },
                               icon: Icon(Icons.attach_file)
                           )
                         ],
@@ -145,9 +175,9 @@ class _ExpandedFABState extends State<ExpandedFAB> {
                   ],
                 ),
               ),
-            ) : const Center(
+            ) : controller.announcements.isEmpty ? Center(
               child: Text('No Announcements yet!'),
-              );
+            ) : Center(child: CircularProgressIndicator());
           })
         ],
       ),

@@ -1,9 +1,13 @@
+import 'dart:typed_data';
+
 import 'package:appwrite/appwrite.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:placed_web/appwrite/appwrite_db/appwrite_db.dart';
 import 'package:placed_web/appwrite/storage/storage.dart';
 import 'package:placed_web/constants/app-ui/placed_strings.dart';
 import 'package:placed_web/model/job_model/job_model.dart';
+import 'package:placed_web/modules/home_module/view/home.dart';
 import 'package:placed_web/modules/post_a_job_module/controller/post_job_controller.dart';
 import 'package:intl/intl.dart';
 import 'package:placed_web/utils/utils.dart';
@@ -81,7 +85,7 @@ class _PostJobState extends State<PostJob> {
                     ),
                     borderRadius: BorderRadius.circular(10)
                 ),
-                child: Center(child: Column(
+                child: Obx(() => controller.bytes.value.isEmpty ? Center(child: Column(
                   mainAxisSize: MainAxisSize.max,
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: <Widget>[
@@ -90,28 +94,39 @@ class _PostJobState extends State<PostJob> {
                     },
                         child: const Text(PlacedStrings.uploadLogo)),
                     const SizedBox(height: 10,),
-                    Obx(() =>
-                    controller.selectedPhoto.value!.name.isNotEmpty ? Container(
+                    const Text('PNG, JPG and JPEG are supported'),
+                  ],),
+                ) : Center(child: Column(
+                  mainAxisSize: MainAxisSize.max,
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: <Widget>[
+                    Container(
                       height: 50,
                       width: 50,
                       decoration: BoxDecoration(shape: BoxShape.circle),
-                      child: Image.network(
-                        controller.selectedPhoto.value!.path, scale: 10,),
-                    ) : Container()),
-                    const Text('PNG, JPG and JPEG are supported'),
+                      child: Image.memory(
+                        controller.bytes.value, scale: 10,),
+                    ),
+                    const SizedBox(height: 10,),
+                    TextButton(onPressed: () {
+                      controller.bytes.value = Uint8List(0);
+                    }, child: Text('Clear', style: TextStyle(color: Colors.blue, decoration: TextDecoration.underline),))
                   ],),
-                ),
+                ),)
               ),
               const SizedBox(height: 20,),
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceAround,
                 children: <Widget>[
-                  Text(PlacedStrings.companyName, style: TextStyle(
-                      fontSize: 18, fontWeight: FontWeight.bold),),
-                  Expanded(child: Container()),
-                  Text(PlacedStrings.jobTitle, style: TextStyle(
-                      fontSize: 18, fontWeight: FontWeight.bold),),
-                  Expanded(child: Container()),
+                  Expanded(
+                    child: Text(PlacedStrings.companyName, style: TextStyle(
+                        fontSize: 18, fontWeight: FontWeight.bold),),
+                  ),
+                  const SizedBox(width: 10,),
+                  Expanded(
+                    child: Text(PlacedStrings.jobTitle, style: TextStyle(
+                        fontSize: 18, fontWeight: FontWeight.bold),),
+                  ),
                 ],
               ),
               const SizedBox(height: 20,),
@@ -156,12 +171,15 @@ class _PostJobState extends State<PostJob> {
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceAround,
                 children: <Widget>[
-                  Text(PlacedStrings.jobType, style: TextStyle(
-                      fontSize: 18, fontWeight: FontWeight.bold),),
-                  Expanded(child: Container()),
-                  Text(PlacedStrings.jobLocation, style: TextStyle(
-                      fontSize: 18, fontWeight: FontWeight.bold),),
-                  Expanded(child: Container()),
+                  Expanded(
+                    child: Text(PlacedStrings.jobType, style: TextStyle(
+                        fontSize: 18, fontWeight: FontWeight.bold),),
+                  ),
+                  const SizedBox(width: 10,),
+                  Expanded(
+                    child: Text(PlacedStrings.jobLocation, style: TextStyle(
+                        fontSize: 18, fontWeight: FontWeight.bold),),
+                  ),
                 ],
               ),
               const SizedBox(height: 20,),
@@ -336,7 +354,7 @@ class _PostJobState extends State<PostJob> {
                                 .blue),)),
                       InkWell(
                         onTap: () {
-                          if (formKey.currentState!.validate()) {
+                          if (formKey.currentState!.validate() && controller.bytes.value.isNotEmpty && controller.selectedFile.value.size != 0) {
                             controller.companyName.value = companyName.text;
                             controller.jobTitle.value = jobTitle.text;
                             controller.jobType.value = jobType.text;
@@ -347,7 +365,43 @@ class _PostJobState extends State<PostJob> {
                             controller.packageStarterRange.value =
                                 packageStartRange.text;
                             controller.desc.value = descriptionController.text;
-                            controller.createJobPost();
+                            controller.createJobPost().then((value) {
+                              if(value.success){
+                                showDialog(context: context, builder: (ctx) {
+                                  return AlertDialog(
+                                    surfaceTintColor: Colors.white,
+                                    title: Text('Creating job post for ${companyName.text}'),
+                                    content: Row(
+                                      mainAxisAlignment: MainAxisAlignment.center,
+                                      children: <Widget>[
+                                        CircularProgressIndicator()
+                                      ],
+                                    ),
+                                  );
+                                });
+                                Future.delayed(Duration(seconds: 3), () {
+                                  Navigator.pushAndRemoveUntil(context, MaterialPageRoute(builder: (ctx) => Home()), (route) => false);
+                                });
+                              }
+                              else if(!value.success){
+                                showDialog(context: context, builder: (ctx) {
+                                  return AlertDialog(
+                                    surfaceTintColor: Colors.white,
+                                    title: Text('An error occurred!'),
+                                    content: Text(value.error.toString())
+                                  );
+                                });
+                              }
+                            });
+                          }
+                          else if(controller.bytes.value.isEmpty && controller.selectedFile.value.size == 0) {
+                            showDialog(context: context, builder: (ctx){
+                              return AlertDialog(
+                                surfaceTintColor: Colors.white,
+                                title: Text('Upload Error'),
+                                content: Text('No file or photo selected!'),
+                              );
+                            });
                           }
                         },
                         child: Container(

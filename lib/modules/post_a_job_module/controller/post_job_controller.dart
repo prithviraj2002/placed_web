@@ -8,7 +8,9 @@ import 'package:placed_web/appwrite/appwrite_db/appwrite_db.dart';
 import 'package:placed_web/appwrite/storage/storage.dart';
 import 'package:placed_web/model/broadcast_model/boradcast_model.dart';
 import 'package:placed_web/model/job_model/job_model.dart';
+import 'package:placed_web/modules/job_details/controller/job_details_controller.dart';
 import 'package:placed_web/modules/jobs/controller/job_controller.dart';
+import 'package:placed_web/placed_response/placed_response.dart';
 import 'package:placed_web/utils/utils.dart';
 import 'package:uuid/uuid.dart';
 
@@ -51,32 +53,43 @@ class PostJobController extends GetxController{
     return randomId;
   }
 
-  void createJobPost(){
+  Future<PlacedResponse> createJobPost() async{
     String randomId = generateRandomId();
+    AppwriteStorage.uploadFile(bytes.value, randomId, companyName.value);
+    AppwriteStorage.uploadDoc(selectedFile.value, randomId);
+    print('This is the pdf view url: ${AppwriteStorage.getDeptDocViewUrl(Utils.reverseString(randomId))}');
     final JobPost jobPost = JobPost(
         companyName: companyName.value,
+        description: desc.value,
         jobId: randomId,
         positionOffered: jobTitle.value,
         package: [packageStarterRange.value, packageEndRange.value ?? ''],
         endDate: endDate.value,
         jobType: jobType.value,
         jobLocation: jobLocation.value,
-        filters: []
+        filters: [],
+      logoUrl: AppwriteStorage.getDeptDocViewUrl(randomId),
+      pdfUrl: AppwriteStorage.getDeptDocViewUrl(Utils.reverseString(randomId))
     );
-    AppwriteStorage.uploadFile(bytes.value, jobPost);
-    AppwriteStorage.uploadDoc(selectedFile.value, jobPost);
     jobController.jobs.add(jobPost);
     AppWriteDb.createJobCollection(jobPost);
-    AppWriteDb.createJob(jobPost);
+    PlacedResponse response = await AppWriteDb.createJob(jobPost);
     sendSystemGenMsg(randomId, companyName.value);
+    fileName.value = '';
+    fileSize.value = 0;
+    selectedFile.value = PlatformFile(name: fileName.value, size: fileSize.value);
+    bytes.value = Uint8List(0);
+    return response;
   }
 
   void sendSystemGenMsg(String jobId, String companyName){
+    print('Sending broadcast message!: ${companyName}');
     final BroadcastMessage msg = BroadcastMessage(
         message: '$companyName invites your application! This is a system generated announcement. You will receive all the announcements from T&P department here.',
         date: DateTime.now().toString(),
         time: DateTime.now().toString(),
-        jobId: jobId
+        jobId: jobId,
+      pdfUrl: '',
     );
     AppWriteDb.sendBroadCastMessage(msg);
   }

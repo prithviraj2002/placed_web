@@ -100,7 +100,7 @@ class StudentsPage extends StatelessWidget {
                               width: 115,
                               decoration: BoxDecoration(
                                   color:
-                                  const Color(PlacedColors.primaryBlue),
+                                  PlacedColors.PrimaryBlueMain,
                                   borderRadius: BorderRadius.circular(5)),
                               child: Row(
                                 mainAxisAlignment: MainAxisAlignment.center,
@@ -126,15 +126,13 @@ class StudentsPage extends StatelessWidget {
                               width: 110,
                               decoration: BoxDecoration(
                                   border: Border.all(
-                                      color: Color(
-                                          PlacedColors.primaryBlue)),
+                                      color: PlacedColors.PrimaryBlueMain),
                                   borderRadius: BorderRadius.circular(5)),
-                              child: const Center(
+                              child: Center(
                                   child: Text(
                                     PlacedStrings.exportSheet,
                                     style: TextStyle(
-                                        color: Color(
-                                            PlacedColors.primaryBlue)),
+                                        color: PlacedColors.PrimaryBlueMain),
                                   )),
                             ),
                           ),

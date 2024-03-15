@@ -3,6 +3,7 @@ import 'package:appwrite/models.dart';
 import 'package:dart_appwrite/models.dart' as dpm;
 import 'package:get/get.dart';
 import 'package:placed_web/appwrite/appwrite_constants/appwrite_constants.dart';
+import 'package:placed_web/appwrite/storage/storage.dart';
 import 'package:placed_web/model/broadcast_model/boradcast_model.dart';
 import 'package:placed_web/model/job_model/job_model.dart';
 import 'package:placed_web/model/profile_model/profile_model.dart';
@@ -39,12 +40,13 @@ class AppWriteDb {
     try {
       final response = await databases.listDocuments(
           databaseId: AppWriteConstants.dbID, collectionId: jobId);
-      for(var profile in response.documents){
+      for (var profile in response.documents) {
+        print(profile.data);
         profiles.add(Profile.fromJson(profile.data, profile.$id));
       }
       return profiles;
     } on AppwriteException catch (e) {
-      print('An error occurred while getting profiles from job id');
+      print('An error occurred while getting profiles from job id! :$e');
       rethrow;
     }
   }
@@ -55,8 +57,7 @@ class AppWriteDb {
     try {
       final response = await databases.listDocuments(
           databaseId: AppWriteConstants.dbID,
-          collectionId: AppWriteConstants.jobsCollectionId
-      );
+          collectionId: AppWriteConstants.jobsCollectionId);
       for (var job in response.documents) {
         jobs.add(JobPost.fromJson(job.data, job.$id));
       }
@@ -68,34 +69,52 @@ class AppWriteDb {
   }
 
   //To update job post details
-  static Future<Document> updateJob(JobPost jobPost) async{
-    try{
+  static Future<Document> updateJob(JobPost jobPost) async {
+    try {
       final response = await databases.updateDocument(
           databaseId: AppWriteConstants.dbID,
           collectionId: AppWriteConstants.jobsCollectionId,
           documentId: jobPost.jobId,
-        data: jobPost.toMap()
-      );
+          data: jobPost.toMap());
       return response;
-    } on AppwriteException catch(e){
+    } on AppwriteException catch (e) {
       print('An error occurred while updating job in appwrite db!');
       rethrow;
     }
   }
 
-  //del a job
+  //Delete a job
   static Future<dynamic> delJob(JobPost jobPost) async {
     try {
-      final response = await databases.deleteDocument(
-          databaseId: AppWriteConstants.dbID,
-          collectionId: AppWriteConstants.jobsCollectionId,
-          documentId: jobPost.jobId
-      ).then((value) {
+      DocumentList profileList = await databases.listDocuments(
+          databaseId: AppWriteConstants.dbID, collectionId: jobPost.jobId);
+      for (var pr in profileList.documents) {
+        Profile profile = Profile.fromJson(pr.data, pr.$id);
+        profile.appliedJobs!.remove(jobPost.jobId);
+      }
+      final response = await databases
+          .deleteDocument(
+              databaseId: AppWriteConstants.dbID,
+              collectionId: AppWriteConstants.jobsCollectionId,
+              documentId: jobPost.jobId)
+          .then((value) {
         serverDatabases.deleteCollection(
-            databaseId: AppWriteConstants.dbID,
-            collectionId: jobPost.jobId
-        );
+            databaseId: AppWriteConstants.dbID, collectionId: jobPost.jobId);
       });
+      final DocumentList msgs = await databases.listDocuments(
+          databaseId: AppWriteConstants.dbID,
+          collectionId: AppWriteConstants.broadcastCollectionsId,
+      );
+      for(var d in msgs.documents){
+        if(d.data['jobId'] == jobPost.jobId){
+          databases.deleteDocument(
+              databaseId: AppWriteConstants.dbID,
+              collectionId: AppWriteConstants.broadcastCollectionsId,
+              documentId: d.$id
+          );
+        }
+      }
+      AppwriteStorage.delJobDocs(jobPost);
       return response;
     } on AppwriteException catch (e) {
       print('An exception occurred while deleting a job post!: $e');
@@ -105,6 +124,7 @@ class AppWriteDb {
 
   //Send a broadcast message to a job on its id.
   static Future<Document> sendBroadCastMessage(BroadcastMessage msg) async {
+    print('Sending broadcast message from appwrite! ${msg.message}');
     try {
       final response = await databases.createDocument(
           databaseId: AppWriteConstants.dbID,
@@ -113,26 +133,40 @@ class AppWriteDb {
           data: msg.toMap());
       return response;
     } on AppwriteException catch (e) {
+      print(
+          'An error occurred while sending broadcast message from appwrite_db!: $e');
       rethrow;
     }
   }
 
-  static Future<List<BroadcastMessage>> getBroadCastMessagesById(String id) async{
+  static Future<List<BroadcastMessage>> getBroadCastMessagesById(
+      String id) async {
     final List<BroadcastMessage> msgs = [];
-    try{
+    try {
       final response = await databases.listDocuments(
           databaseId: AppWriteConstants.dbID,
           collectionId: AppWriteConstants.broadcastCollectionsId,
-        queries: [
-          Query.equal('jobId', id)
-        ]
-      );
-      for(var msg in response.documents){
+          queries: [Query.equal('jobId', id)]);
+      for (var msg in response.documents) {
         msgs.add(BroadcastMessage.fromJson(msg.data));
       }
       return msgs;
-    } on AppwriteException catch(e){
+    } on AppwriteException catch (e) {
       print('An error occurred while getting broad cast messages!: $e');
+      rethrow;
+    }
+  }
+
+  static Future<JobPost> getJobById(String id) async {
+    try {
+      final response = await databases.getDocument(
+          databaseId: AppWriteConstants.dbID,
+          collectionId: AppWriteConstants.jobsCollectionId,
+          documentId: id);
+      JobPost jobPost = JobPost.fromJson(response.data, id);
+      return jobPost;
+    } on AppwriteException catch (e) {
+      print('An error occurred while getting job by id!: $e');
       rethrow;
     }
   }
@@ -156,8 +190,7 @@ class AppWriteDb {
           collectionId: response.$id,
           key: 'name',
           size: 100,
-          xrequired: true
-      );
+          xrequired: true);
       serverDatabases.createStringAttribute(
           databaseId: AppWriteConstants.dbID,
           collectionId: response.$id,
@@ -339,12 +372,12 @@ class AppWriteDb {
           documentId: jobPost.jobId,
           data: jobPost.toMap());
       final PlacedResponse placedResponse =
-      PlacedResponse(data: response.data, success: true, error: null);
+          PlacedResponse(data: response.data, success: true, error: null);
       return placedResponse;
     } on AppwriteException catch (e) {
       print('An error occurred while creating job from appwrite db!: $e');
       final PlacedResponse placedResponse =
-      PlacedResponse(data: '', success: false, error: e);
+          PlacedResponse(data: '', success: false, error: e);
       return placedResponse;
     }
   }

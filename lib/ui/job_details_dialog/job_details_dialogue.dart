@@ -2,9 +2,11 @@ import 'package:flutter/material.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:placed_web/appwrite/appwrite_db/appwrite_db.dart';
+import 'package:placed_web/appwrite/storage/storage.dart';
 import 'package:placed_web/model/job_model/job_model.dart';
 import 'package:placed_web/modules/home_module/view/home.dart';
 import 'package:placed_web/modules/jobs/controller/job_controller.dart';
+import 'package:placed_web/utils/utils.dart';
 
 class JobDetailsDialog extends StatefulWidget {
   JobPost jobPost;
@@ -102,8 +104,8 @@ class _JobDetailsDialogState extends State<JobDetailsDialog> {
                     width: 100,
                     decoration: BoxDecoration(
                       shape: BoxShape.circle,
-                      color: Colors.grey,
                     ),
+                    child: Image.network(AppwriteStorage.getDeptDocViewUrl(widget.jobPost.jobId)),
                   ),
                 ),
                 const SizedBox(height: 20,),
@@ -217,7 +219,10 @@ class _JobDetailsDialogState extends State<JobDetailsDialog> {
                           endDate: lastDateToApply.text,
                           jobType: jobType.text,
                           jobLocation: jobLocation.text,
-                          filters: []);
+                          filters: [],
+                          logoUrl: AppwriteStorage.getDeptDocViewUrl(widget.jobPost.jobId),
+                          pdfUrl: AppwriteStorage.getDeptDocViewUrl(Utils.reverseString(widget.jobPost.jobId))
+                      );
                       AppWriteDb.updateJob(jobPost).then((value){
                         if(value.$createdAt.isNotEmpty){
                           jobController.jobs.remove(widget.jobPost);

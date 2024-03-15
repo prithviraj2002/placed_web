@@ -41,7 +41,7 @@ class _HomePageState extends State<HomePage> {
                   .of(context)
                   .size
                   .width * 0.2,
-              color: const Color(PlacedColors.primaryBlue),
+              color: PlacedColors.PrimaryBlueMain,
               child: const Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
@@ -106,7 +106,7 @@ class _HomePageState extends State<HomePage> {
                                   width: 100,
                                   decoration: BoxDecoration(
                                       color:
-                                      const Color(PlacedColors.primaryBlue),
+                                      PlacedColors.PrimaryBlueMain,
                                       borderRadius: BorderRadius.circular(5)),
                                   child: const Center(
                                       child: Text(
@@ -127,15 +127,13 @@ class _HomePageState extends State<HomePage> {
                                   width: 100,
                                   decoration: BoxDecoration(
                                       border: Border.all(
-                                          color: const Color(
-                                              PlacedColors.primaryBlue)),
+                                          color: PlacedColors.PrimaryBlueMain),
                                       borderRadius: BorderRadius.circular(5)),
-                                  child: const Center(
+                                  child: Center(
                                       child: Text(
                                         PlacedStrings.exportSheet,
                                         style: TextStyle(
-                                            color: Color(
-                                                PlacedColors.primaryBlue)),
+                                            color: PlacedColors.PrimaryBlueMain),
                                       )),
                                 ),
                               ),

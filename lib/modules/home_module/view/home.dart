@@ -24,7 +24,6 @@ class _HomeState extends State<Home> {
     'Students',
     'Job Applicants',
     'Post a Job',
-    'Import sheet',
   ];
 
   void updateWidget(int index){
@@ -46,9 +45,6 @@ class _HomeState extends State<Home> {
     else if(index == 3){
       return PostJob();
     }
-    else if(index == 4){
-      return ImportSheet();
-    }
     return Overview();
   }
 
@@ -64,7 +60,7 @@ class _HomeState extends State<Home> {
                 .of(context)
                 .size
                 .width * 0.2,
-            color: const Color(PlacedColors.primaryBlue),
+            color: PlacedColors.PrimaryBlueMain,
             child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
@@ -110,15 +106,6 @@ class _HomeState extends State<Home> {
                     },
                     title: Text(
                       PlacedStrings.postAJob,
-                      style: TextStyle(color: Colors.white, fontSize: 16),
-                    ),
-                  ),
-                  ListTile(
-                    onTap: () {
-                      updateWidget(4);
-                    },
-                    title: Text(
-                      PlacedStrings.importSheet,
                       style: TextStyle(color: Colors.white, fontSize: 16),
                     ),
                   ),

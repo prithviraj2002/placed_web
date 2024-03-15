@@ -18,4 +18,9 @@ class JobController extends GetxController{
     jobs.value = await AppWriteDb.getAllJobs();
     isLoading = false;
   }
+
+  void delJob(JobPost jobPost){
+    jobs.remove(jobPost);
+    AppWriteDb.delJob(jobPost);
+  }
 }
