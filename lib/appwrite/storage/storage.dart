@@ -7,6 +7,7 @@ import 'package:placed_web/appwrite/appwrite_constants/appwrite_constants.dart';
 import 'package:placed_web/model/job_model/job_model.dart';
 import 'package:dart_appwrite/dart_appwrite.dart' as dp;
 import 'package:placed_web/utils/utils.dart';
+import 'package:uuid/uuid.dart';
 
 class AppwriteStorage{
   static Client client = Client()
@@ -21,12 +22,12 @@ class AppwriteStorage{
       .setKey(AppWriteConstants.apiKey);
   static dp.Storage serverStorage = dp.Storage(serverClient);
 
-  static Future<File> uploadFile(Uint8List bytes, JobPost jobPost) async {
+  static Future<File> uploadFile(Uint8List bytes, String jobId, String companyName) async {
     try {
       final response = await storage.createFile(
           bucketId: AppWriteConstants.departmentBucketId,
-          fileId: jobPost.jobId,
-          file: InputFile.fromBytes(bytes: bytes, filename: '${jobPost.companyName} - logo'),
+          fileId: jobId,
+          file: InputFile.fromBytes(bytes: bytes, filename: '${companyName} - logo'),
       );
       return response;
     } on AppwriteException catch (e) {
@@ -35,7 +36,7 @@ class AppwriteStorage{
     }
   }
 
-  static uploadDoc(PlatformFile doc, JobPost jobPost) async {
+  static uploadDoc(PlatformFile doc, String jobId) async {
     try {
       if (doc.bytes == null) {
         throw Exception("Document bytes are null.");
@@ -45,11 +46,28 @@ class AppwriteStorage{
 
       final response = await storage.createFile(
           bucketId: AppWriteConstants.departmentBucketId,
-          fileId: Utils.reverseString(jobPost.jobId),
+          fileId: Utils.reverseString(jobId),
           file: InputFile.fromBytes(bytes: bytes, filename: doc.name));
       return response;
     } on AppwriteException catch(e) {
       print('An error occurred while uploading doc to appwrite storage!: $e');
+      rethrow;
+    }
+  }
+
+  static Future<String> sendDocInBroadcast(PlatformFile doc) async{
+    try{
+      List<int> bytes = doc.bytes!;
+
+      String id = Uuid().v4();
+
+      final response = await storage.createFile(
+          bucketId: AppWriteConstants.departmentBucketId,
+          fileId: id,
+          file: InputFile.fromBytes(bytes: bytes, filename: doc.name));
+      return getDeptDocViewUrl(id);
+    } on AppwriteException catch(e) {
+      print('An error occurred while uploading doc to broadcast message in appwrite storage!: $e');
       rethrow;
     }
   }
@@ -66,11 +84,25 @@ class AppwriteStorage{
     }
   }
 
+  static Future<void> delJobDocs(JobPost jobPost) async{
+    try{
+      final response = await storage.deleteFile(
+          bucketId: AppWriteConstants.departmentBucketId,
+          fileId: jobPost.jobId
+      ).then((value) {
+        storage.deleteFile(bucketId: AppWriteConstants.departmentBucketId, fileId: Utils.reverseString(jobPost.jobId));
+      });
+    } on AppwriteException catch(e){
+      print('An error occurred while deleting job documents!: $e');
+      rethrow;
+    }
+  }
+
   static String getResumeViewUrl(String fileId) {
     return '${AppWriteConstants.apiEndPoint}/storage/buckets/${AppWriteConstants.resumeBucketId}/files/$fileId/view?project=${AppWriteConstants.projectId}&mode=admin';
   }
 
-  static String getLogoViewUrl(String fileId){
+  static String getDeptDocViewUrl(String fileId){
     return '${AppWriteConstants.apiEndPoint}/storage/buckets/${AppWriteConstants.departmentBucketId}/files/$fileId/view?project=${AppWriteConstants.projectId}&mode=admin';
   }
 

@@ -7,6 +7,8 @@ class JobPost{
   final String endDate;
   final String jobType;
   final String jobLocation;
+  String logoUrl;
+  String pdfUrl;
   final List<dynamic> filters;
 
   JobPost({
@@ -19,6 +21,8 @@ class JobPost{
     required this.jobType,
     required this.jobLocation,
     required this.filters,
+    required this.logoUrl,
+    required this.pdfUrl
   });
 
   factory JobPost.fromJson(Map<String, dynamic> json, String jobId){
@@ -32,6 +36,8 @@ class JobPost{
       jobType: json['jobType'],
       jobLocation: json['jobLocation'],
       filters: json['filters'],
+      logoUrl: json['logoUrl'] ?? '',
+      pdfUrl: json['pdfUrl'] ?? '',
     );
   }
 
@@ -46,6 +52,8 @@ class JobPost{
       'jobType': jobType,
       'jobLocation': jobLocation,
       'filters': filters,
+      'logoUrl': logoUrl ?? '',
+      'pdfUrl': pdfUrl ?? '',
     };
   }
 

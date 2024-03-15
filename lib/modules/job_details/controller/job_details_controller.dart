@@ -2,13 +2,16 @@ import 'dart:async';
 
 import 'package:appwrite/appwrite.dart';
 import 'package:excel/excel.dart' as ex;
+import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:placed_web/appwrite/appwrite_constants/appwrite_constants.dart';
 import 'package:placed_web/appwrite/appwrite_db/appwrite_db.dart';
 import 'package:placed_web/appwrite/storage/storage.dart';
 import 'package:placed_web/model/broadcast_model/boradcast_model.dart';
+import 'package:placed_web/model/job_model/job_model.dart';
 import 'package:placed_web/model/profile_model/profile_model.dart';
+import 'package:placed_web/utils/utils.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 class JobDetailController extends GetxController{
@@ -19,7 +22,10 @@ class JobDetailController extends GetxController{
   String jobId = '';
   bool isLoading = true;
   Rx<bool> isExpanded = false.obs;
-  bool search = false;
+  Rx<bool> search = false.obs;
+  Rx<PlatformFile> selectedFile = PlatformFile(name: fileName.value, size: fileSize.value).obs;
+  static Rx<String> fileName = ''.obs;
+  static Rx<int> fileSize = 0.obs;
 
   @override
   void onInit() {
@@ -79,6 +85,7 @@ class JobDetailController extends GetxController{
   }
 
   List<DataRow> searchData(String search){
+    print('Enetered search data function in controller');
     List<DataRow> dataRow = [];
     List<Profile> searchProfiles = [];
     Profile? profile = searchByMobile(search);
@@ -91,51 +98,52 @@ class JobDetailController extends GetxController{
     if(prf.isNotEmpty){
       for(Profile p in prf){
         searchProfiles.add(p);
+        print('Adding profile to list ${p.name}');
       }
     }
-    if(searchProfiles.isNotEmpty){
-      for(int index = 0; index < searchProfiles.length; index++){
-        Profile profile = searchProfiles[index];
-        dataRow.add(
-            DataRow(
-                cells: [
-                  DataCell(Text('${index + 1}')),
-                  DataCell(
-                      Container(
-                        decoration: BoxDecoration(
-                            border: Border.all(color: Colors.grey),
-                            shape: BoxShape.circle
-                        ),
-                        child: CircleAvatar(
-                          radius: 50, // Adjust the radius as needed
-                          backgroundColor: Colors.transparent, // Make the background transparent
-                          backgroundImage: NetworkImage(AppwriteStorage.getImageViewUrl(profile.id), scale: 10, ),
-                        ),
-                      )
-                  ),
-                  DataCell(Text(profile.name)),
-                  DataCell(Text(profile.email)),
-                  DataCell(Text(profile.dateOfBirth)),
-                  DataCell(Text(profile.IU)),
-                  DataCell(Text(profile.phoneNumber)),
-                  DataCell(Text(profile.course)),
-                  DataCell(Text(profile.degree)),
-                  DataCell(Text(profile.year.toString())),
-                  DataCell(Text(profile.sem.toString())),
-                  DataCell(
-                      TextButton(
-                          onPressed: () {
-                            final Uri _url = Uri.parse(AppwriteStorage.getResumeViewUrl(profile.id));
-                            launchUrl(_url);
-                          },
-                          child: const Text('View resume')
-                      )
-                  )
-                ]
-            )
-        );
-      }
-    } else if(searchProfiles.isEmpty){
+    for(int index = 0; index < searchProfiles.length; index++){
+      Profile profile = searchProfiles[index];
+      dataRow.add(
+          DataRow(
+              cells: [
+                DataCell(Text('${index + 1}')),
+                DataCell(
+                    Container(
+                      decoration: BoxDecoration(
+                          border: Border.all(color: Colors.grey),
+                          shape: BoxShape.circle
+                      ),
+                      child: CircleAvatar(
+                        radius: 50, // Adjust the radius as needed
+                        backgroundColor: Colors.transparent, // Make the background transparent
+                        backgroundImage: NetworkImage(AppwriteStorage.getImageViewUrl(profile.id), scale: 10, ),
+                      ),
+                    )
+                ),
+                DataCell(Text(profile.name)),
+                DataCell(Text(profile.email)),
+                DataCell(Text(profile.dateOfBirth)),
+                DataCell(Text(profile.IU)),
+                DataCell(Text(profile.phoneNumber)),
+                DataCell(Text(profile.course)),
+                DataCell(Text(profile.degree)),
+                DataCell(Text(profile.year.toString())),
+                DataCell(Text(profile.sem.toString())),
+                DataCell(
+                    TextButton(
+                        onPressed: () {
+                          final Uri _url = Uri.parse(AppwriteStorage.getResumeViewUrl(profile.id));
+                          launchUrl(_url);
+                        },
+                        child: const Text('View resume')
+                    )
+                )
+              ]
+          )
+      );
+      print(searchProfiles.first.name);
+    }
+    if(searchProfiles.isEmpty){
       dataRow.add(
           DataRow(
               cells: [
@@ -219,9 +227,29 @@ class JobDetailController extends GetxController{
     announcements.value = await AppWriteDb.getBroadCastMessagesById(jobId);
   }
 
-  void sendAnnouncement(BroadcastMessage msg){
-    announcements.add(msg);
-    AppWriteDb.sendBroadCastMessage(msg);
+  void sendAnnouncement(String message, JobPost jobPost) async{
+    String pdfUrl = '';
+    if(selectedFile.value.name.isNotEmpty){
+      AppwriteStorage.sendDocInBroadcast(selectedFile.value).then((String pdfUrl) {
+        BroadcastMessage msg = BroadcastMessage(
+            message: message, date: DateTime.now().toIso8601String(),
+            time: DateTime.now().toIso8601String(), jobId: jobPost.jobId, pdfUrl: pdfUrl);
+        announcements.add(msg);
+        AppWriteDb.sendBroadCastMessage(msg);
+      });
+    } else if(selectedFile.value.name.isEmpty){
+      BroadcastMessage msg = BroadcastMessage(
+          message: message, date: DateTime.now().toIso8601String(),
+          time: DateTime.now().toIso8601String(), jobId: jobPost.jobId, pdfUrl: pdfUrl);
+      announcements.add(msg);
+      AppWriteDb.sendBroadCastMessage(msg);
+    }
+  }
+
+  Future<void> uploadDocuments() async{
+    selectedFile.value = (await Utils.pickDocs())!;
+    fileName.value = selectedFile.value.name;
+    fileSize.value = selectedFile.value.size;
   }
 
   @override

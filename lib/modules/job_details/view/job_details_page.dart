@@ -21,6 +21,14 @@ class _JobDetailsState extends State<JobDetails> {
   JobDetailController controller = Get.find<JobDetailController>();
   TextEditingController searchController = TextEditingController();
 
+  List<DataRow> getFilteredData() {
+    if (searchController.text.isEmpty) {
+      return controller.getDataRow();
+    } else {
+      return controller.searchData(searchController.text);
+    }
+  }
+
   @override
   void initState() {
     // TODO: implement initState
@@ -69,12 +77,10 @@ class _JobDetailsState extends State<JobDetails> {
                             child: Center(
                               child: TextFormField(
                                 decoration: InputDecoration(
-                                  prefix: InkWell(
-                                    onTap: () {
-                                      controller.search = true;
-                                    },
-                                    child: const Icon(Icons.search),
-                                  ),
+                                  prefix: IconButton(onPressed: () {
+                                    controller.search.value = true;
+                                  },
+                                    icon: const Icon(Icons.search),),
                                   hintText: PlacedStrings.searchTableHintText,
                                   hintStyle: const TextStyle(fontSize: 14),
                                   border: InputBorder.none,
@@ -130,7 +136,7 @@ class _JobDetailsState extends State<JobDetails> {
                               width: 115,
                               decoration: BoxDecoration(
                                   color:
-                                  const Color(PlacedColors.primaryBlue),
+                                  PlacedColors.PrimaryBlueMain,
                                   borderRadius: BorderRadius.circular(5)),
                               child: const Row(
                                 mainAxisAlignment: MainAxisAlignment.center,
@@ -156,15 +162,13 @@ class _JobDetailsState extends State<JobDetails> {
                               width: 110,
                               decoration: BoxDecoration(
                                   border: Border.all(
-                                      color: Color(
-                                          PlacedColors.primaryBlue)),
+                                      color: PlacedColors.PrimaryBlueMain),
                                   borderRadius: BorderRadius.circular(5)),
-                              child: const Center(
+                              child: Center(
                                   child: Text(
                                     PlacedStrings.exportSheet,
                                     style: TextStyle(
-                                        color: Color(
-                                            PlacedColors.primaryBlue)),
+                                        color: PlacedColors.PrimaryBlueMain),
                                   )),
                             ),
                           ),
@@ -177,7 +181,8 @@ class _JobDetailsState extends State<JobDetails> {
                     scrollDirection: Axis.vertical,
                     child: SingleChildScrollView(
                       scrollDirection: Axis.horizontal,
-                      child: DataTable(
+                      child: Obx(() {
+                        return DataTable(
                           dividerThickness: 0.00000000001,
                           columns: const [
                             DataColumn(label: Text('SR.NO')),
@@ -193,9 +198,9 @@ class _JobDetailsState extends State<JobDetails> {
                             DataColumn(label: Text('Semester')),
                             DataColumn(label: Text('Resume'))
                           ],
-                          rows: controller.search && searchController.text.isNotEmpty ? controller.searchData(searchController.text)
-                              : controller.getDataRow(),
-                      ),
+                          rows: getFilteredData(),
+                        );
+                      }),
                     ),
                   ),
                 ],
@@ -216,8 +221,14 @@ class _JobDetailsState extends State<JobDetails> {
         floatingActionButton: Obx(() {
           return Container(
             color: Colors.white,
-            height: controller.isExpanded.value ? MediaQuery.of(context).size.width * 0.3 : 50,
-            width: MediaQuery.of(context).size.width * 0.25,
+            height: controller.isExpanded.value ? MediaQuery
+                .of(context)
+                .size
+                .width * 0.3 : 50,
+            width: MediaQuery
+                .of(context)
+                .size
+                .width * 0.25,
             child: controller.isExpanded.value
                 ? ExpandedFAB(
                 jobPost: widget.jobPost)
