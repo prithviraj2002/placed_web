@@ -7,6 +7,7 @@ class AppWriteConstants{
   static const String profileCollectionsId = '65ab73eec953f243cdac';
   static const String broadcastCollectionsId = '65aca87fbf43f6aef2bb';
   static const String jobsCollectionId = '65ad06fdc3b55e37ae8b';
+  static const String filtersCollectionId = '65f7d8d6e552d0b28b91';
 
   //Storage
   static const String departmentBucketId = '65e59e475d2b35953495';

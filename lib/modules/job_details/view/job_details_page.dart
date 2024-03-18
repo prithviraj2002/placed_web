@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:placed_web/appwrite/storage/storage.dart';
 import 'package:placed_web/constants/app-ui/placed_colors.dart';
 import 'package:placed_web/constants/app-ui/placed_strings.dart';
 import 'package:placed_web/model/job_model/job_model.dart';
@@ -7,6 +8,7 @@ import 'package:placed_web/model/profile_model/profile_model.dart';
 import 'package:placed_web/modules/job_details/controller/job_details_controller.dart';
 import 'package:placed_web/ui/closed_FAB/closed_fab.dart';
 import 'package:placed_web/ui/expanded_FAB/expanded_fab.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 class JobDetails extends StatefulWidget {
   JobPost jobPost;
@@ -20,14 +22,10 @@ class JobDetails extends StatefulWidget {
 class _JobDetailsState extends State<JobDetails> {
   JobDetailController controller = Get.find<JobDetailController>();
   TextEditingController searchController = TextEditingController();
-
-  List<DataRow> getFilteredData() {
-    if (searchController.text.isEmpty) {
-      return controller.getDataRow();
-    } else {
-      return controller.searchData(searchController.text);
-    }
-  }
+  final drawerKey = GlobalKey<ScaffoldState>();
+  List<Profile> filteredData = [];
+  int? sortColumnIndex;
+  bool isAscending = false;
 
   @override
   void initState() {
@@ -35,6 +33,19 @@ class _JobDetailsState extends State<JobDetails> {
     super.initState();
     controller.getProfiles(widget.jobPost.jobId);
     controller.getAnnouncements(widget.jobPost.jobId);
+    filteredData = controller.profiles;
+  }
+
+  void _onSearchTextChanged(String text) {
+    setState(() {
+      filteredData = text.isEmpty
+          ? controller.profiles
+          : controller.profiles
+          .where((profile) =>
+      profile.name.toLowerCase().contains(text.toLowerCase()) ||
+          profile.IU.toLowerCase().contains(text.toLowerCase()) || profile.email.toLowerCase().contains(text.toLowerCase()) || profile.phoneNumber.toString().toLowerCase().contains(text.toLowerCase()))
+          .toList();
+    });
   }
 
   @override
@@ -76,6 +87,7 @@ class _JobDetailsState extends State<JobDetails> {
                             ),
                             child: Center(
                               child: TextFormField(
+                                onChanged: _onSearchTextChanged,
                                 decoration: InputDecoration(
                                   prefix: IconButton(onPressed: () {
                                     controller.search.value = true;
@@ -155,7 +167,7 @@ class _JobDetailsState extends State<JobDetails> {
                           ),
                           InkWell(
                             onTap: () {
-                              controller.exportToExcel();
+                              controller.exportToExcel(widget.jobPost.companyName);
                             },
                             child: Container(
                               height: 40,
@@ -183,11 +195,13 @@ class _JobDetailsState extends State<JobDetails> {
                       scrollDirection: Axis.horizontal,
                       child: Obx(() {
                         return DataTable(
+                          sortColumnIndex: 2,
+                          sortAscending: isAscending,
                           dividerThickness: 0.00000000001,
-                          columns: const [
+                          columns: [
                             DataColumn(label: Text('SR.NO')),
                             DataColumn(label: Text('Profile')),
-                            DataColumn(label: Text('Name')),
+                            DataColumn(label: Text('Name'), onSort: onSort),
                             DataColumn(label: Text('Email')),
                             DataColumn(label: Text('Date of Birth')),
                             DataColumn(label: Text('IU')),
@@ -198,7 +212,44 @@ class _JobDetailsState extends State<JobDetails> {
                             DataColumn(label: Text('Semester')),
                             DataColumn(label: Text('Resume'))
                           ],
-                          rows: getFilteredData(),
+                          rows: List.generate(filteredData.length, (index) {
+                            final profile = filteredData[index];
+                            return DataRow(
+                                cells: [
+                              DataCell(Text('${index + 1}')),
+                              DataCell(
+                                  Container(
+                                    decoration: BoxDecoration(
+                                        border: Border.all(color: Colors.grey),
+                                        shape: BoxShape.circle
+                                    ),
+                                    child: CircleAvatar(
+                                      radius: 50, // Adjust the radius as needed
+                                      backgroundColor: Colors.transparent, // Make the background transparent
+                                      backgroundImage: NetworkImage(AppwriteStorage.getImageViewUrl(profile.id), scale: 10, ),
+                                    ),
+                                  )
+                              ),
+                              DataCell(Text(profile.name)),
+                              DataCell(Text(profile.email)),
+                              DataCell(Text(profile.dateOfBirth)),
+                              DataCell(Text(profile.IU)),
+                              DataCell(Text(profile.phoneNumber)),
+                              DataCell(Text(profile.course)),
+                              DataCell(Text(profile.degree)),
+                              DataCell(Text(profile.year.toString())),
+                              DataCell(Text(profile.sem.toString())),
+                              DataCell(
+                                  TextButton(
+                                      onPressed: () {
+                                        final Uri _url = Uri.parse(AppwriteStorage.getResumeViewUrl(profile.id));
+                                        launchUrl(_url);
+                                      },
+                                      child: const Text('View resume')
+                                  )
+                              )
+                            ]);
+                          })
                         );
                       }),
                     ),
@@ -237,5 +288,20 @@ class _JobDetailsState extends State<JobDetails> {
         })
     );
   }
+
+  void onSort(int columnIndex, bool ascending) {
+    if(columnIndex == 2){
+      filteredData.sort((profile1, profile2) => compareString(ascending, profile1.name, profile2.name));
+    }
+    setState(() {
+      sortColumnIndex = columnIndex;
+      isAscending =  ascending;
+    });
+  }
+
+  int compareString(bool ascending, String name, String name2) {
+    return ascending ? name.compareTo(name2) : name2.compareTo(name);
+  }
 }
+
 
