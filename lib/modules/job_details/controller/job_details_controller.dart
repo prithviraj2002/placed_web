@@ -48,6 +48,7 @@ class JobDetailController extends GetxController{
 
   //Search by name in profiles
   List<Profile> searchByName(String name){
+    print('Searching by name!');
     List<Profile> relevantProfiles = [];
     for(Profile p in profiles){
       if(p.name == name){
@@ -58,6 +59,7 @@ class JobDetailController extends GetxController{
   }
 
   Profile? searchByIU(String IU){
+    print('Searching by IU');
     for(Profile p in profiles){
       if(p.IU == IU){
         return p;
@@ -67,6 +69,7 @@ class JobDetailController extends GetxController{
   }
 
   Profile? searchByEmail(String email){
+    print('Searching by email');
     for(Profile p in profiles){
       if(p.email == email){
         return p;
@@ -76,6 +79,7 @@ class JobDetailController extends GetxController{
   }
 
   Profile? searchByMobile(String number){
+    print('Searching by number');
     for(Profile p in profiles){
       if(p.phoneNumber == number){
         return p;
@@ -85,15 +89,9 @@ class JobDetailController extends GetxController{
   }
 
   List<DataRow> searchData(String search){
-    print('Enetered search data function in controller');
+    print('Entered search data function in controller');
     List<DataRow> dataRow = [];
     List<Profile> searchProfiles = [];
-    Profile? profile = searchByMobile(search);
-    searchProfiles.add(profile!);
-    Profile? p = searchByEmail(search);
-    searchProfiles.add(p!);
-    Profile? pr = searchByMobile(search);
-    searchProfiles.add(pr!);
     List<Profile> prf = searchByName(search);
     if(prf.isNotEmpty){
       for(Profile p in prf){
@@ -259,18 +257,33 @@ class JobDetailController extends GetxController{
     stopListeningToProfiles();
   }
 
-  void exportToExcel() {
+  void exportToExcel(String jobName) {
     var excel = ex.Excel.createExcel();
-    var sheet = excel['Master Data'];
+    var sheet = excel[jobName];
     List<ex.TextCellValue> dataRow = [];
 
     sheet.appendRow([
       const ex.TextCellValue('Name'),
-      const ex.TextCellValue('IU Number'),
       const ex.TextCellValue('Email'),
+      const ex.TextCellValue('IU Number'),
+      const ex.TextCellValue('Gender'),
+      const ex.TextCellValue('Contact Number'),
+      const ex.TextCellValue('Date of Birth'),
+      const ex.TextCellValue('Address'),
       const ex.TextCellValue('Branch'),
       const ex.TextCellValue('Semester'),
+      const ex.TextCellValue('Year'),
+      const ex.TextCellValue('Year of passing'),
       const ex.TextCellValue('CGPA'),
+      const ex.TextCellValue('Active Backlogs'),
+      const ex.TextCellValue('Total Backlogs'),
+      const ex.TextCellValue('Degree'),
+      const ex.TextCellValue('10th Marks'),
+      const ex.TextCellValue('10th Passing year'),
+      const ex.TextCellValue('12th Marks'),
+      const ex.TextCellValue('12th Passing year'),
+      const ex.TextCellValue('Board'),
+      const ex.TextCellValue('Resume'),
     ]);
 
     for (var profile in profiles) {
@@ -281,6 +294,6 @@ class JobDetailController extends GetxController{
       dataRow = [];
     }
 
-    excel.save(fileName: 'student_master_data.xlsx');
+    excel.save(fileName: '${jobName}.xlsx');
   }
 }

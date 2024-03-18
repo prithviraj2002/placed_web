@@ -1,3 +1,4 @@
+import 'package:placed_web/appwrite/storage/storage.dart';
 import 'package:uuid/uuid.dart';
 
 class Profile {
@@ -131,11 +132,9 @@ class Profile {
 
   List<String> toList(){
     return [
-      name.toString(), email.toString(), dateOfBirth.toString(), IU.toString(), phoneNumber.toString(), course.toString(),
-      degree.toString(), year.toString(), sem.toString(), XMarks.toString(), XPassingYear.toString(), gender.toString(), board.toString(),
-      engYearOfPassing.toString(), cgpa.toString(), activeBackLog.toString(), totalBackLog.toString(), address.toString(), XIIMarks.toString(),
-      XIIPassingYear.toString(), diplomaBranch.toString(), diplomaPassingYear.toString(), diplomaMarks.toString(), appliedJobs.toString(), linkedinProfile.toString(),
-      githubProfile.toString(), otherLink.toString(), status.toString()
+      name.toString(), email.toString(), IU.toString(), gender.toString(), phoneNumber.toString(), dateOfBirth.toString(), address.toString(),
+      course.toString(), sem.toString(), year.toString(), engYearOfPassing.toString(), cgpa.toString(), activeBackLog.toString(), totalBackLog.toString(),
+      degree.toString(), XMarks.toString(), XPassingYear.toString(), XIIMarks.toString(), XIIPassingYear.toString(), board.toString(), AppwriteStorage.getResumeViewUrl(id),
     ];
   }
 

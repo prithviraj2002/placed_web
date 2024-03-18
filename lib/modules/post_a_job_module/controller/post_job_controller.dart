@@ -2,6 +2,7 @@ import 'dart:io';
 import 'dart:typed_data';
 
 import 'package:file_picker/file_picker.dart';
+import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:placed_web/appwrite/appwrite_db/appwrite_db.dart';
@@ -92,5 +93,34 @@ class PostJobController extends GetxController{
       pdfUrl: '',
     );
     AppWriteDb.sendBroadCastMessage(msg);
+  }
+
+  Widget getFilters(){
+    return Row(
+      mainAxisSize: MainAxisSize.max,
+      mainAxisAlignment: MainAxisAlignment.start,
+      children: [
+        Column(
+          children: <Widget>[
+            Text('Eligibility Criteria'),
+            const SizedBox(height: 10,),
+            Row(
+              children: <Widget>[
+                Expanded(child: Text('Criteria')),
+                Expanded(child: Text('Condition')),
+                Expanded(child: Text('Value'),),
+              ],
+            ),
+            Row(
+              children: <Widget>[
+                Expanded(child: TextFormField()),
+                Expanded(child: TextFormField()),
+                Expanded(child: TextFormField()),
+              ],
+            ),
+          ],
+        ),
+      ],
+    );
   }
 }

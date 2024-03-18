@@ -5,6 +5,7 @@ import 'package:get/get.dart';
 import 'package:placed_web/appwrite/appwrite_constants/appwrite_constants.dart';
 import 'package:placed_web/appwrite/storage/storage.dart';
 import 'package:placed_web/model/broadcast_model/boradcast_model.dart';
+import 'package:placed_web/model/filter_model/filter_model.dart';
 import 'package:placed_web/model/job_model/job_model.dart';
 import 'package:placed_web/model/profile_model/profile_model.dart';
 import 'package:placed_web/placed_response/placed_response.dart';
@@ -379,6 +380,37 @@ class AppWriteDb {
       final PlacedResponse placedResponse =
           PlacedResponse(data: '', success: false, error: e);
       return placedResponse;
+    }
+  }
+
+  //To upload job post filters
+  static Future<Document> uploadFilter(Filter filter, String jobId) async{
+    try{
+      final response = await databases.createDocument(
+          databaseId: AppWriteConstants.dbID,
+          collectionId: AppWriteConstants.filtersCollectionId,
+          documentId: jobId,
+          data: filter.toMap()
+      );
+      return response;
+    } on AppwriteException catch(e){
+      print('An error occurred while uploading Filter to database!');
+      rethrow;
+    }
+  }
+
+  //To delete job post filters while deleting a job post.
+  static Future<void> delFilter(String jobId) async{
+    try{
+      final response = await databases.deleteDocument(
+          databaseId: AppWriteConstants.dbID,
+          collectionId: AppWriteConstants.filtersCollectionId,
+          documentId: jobId
+      );
+      return response;
+    } on AppwriteException catch(e){
+      print('An error occurred while deleting a filter from database');
+      rethrow;
     }
   }
 }
