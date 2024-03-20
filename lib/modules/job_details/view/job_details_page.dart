@@ -74,117 +74,46 @@ class _JobDetailsState extends State<JobDetails> {
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: <Widget>[
-                      Row(
-                        mainAxisSize: MainAxisSize.min,
-                        mainAxisAlignment: MainAxisAlignment.start,
-                        children: [
-                          Container(
-                            height: 40,
-                            width: 240,
-                            decoration: BoxDecoration(
-                              borderRadius: BorderRadius.circular(5),
-                              color: Colors.black12,
-                            ),
-                            child: Center(
-                              child: TextFormField(
-                                onChanged: _onSearchTextChanged,
-                                decoration: InputDecoration(
-                                  prefix: IconButton(onPressed: () {
-                                    controller.search.value = true;
-                                  },
-                                    icon: const Icon(Icons.search),),
-                                  hintText: PlacedStrings.searchTableHintText,
-                                  hintStyle: const TextStyle(fontSize: 14),
-                                  border: InputBorder.none,
-                                ),
-                              ),
+                      Container(
+                        height: 40,
+                        width: 240,
+                        decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(5),
+                          color: Colors.black12,
+                        ),
+                        child: Center(
+                          child: TextFormField(
+                            onChanged: _onSearchTextChanged,
+                            decoration: InputDecoration(
+                              prefix: IconButton(onPressed: () {
+                                controller.search.value = true;
+                              },
+                                icon: const Icon(Icons.search),),
+                              hintText: PlacedStrings.searchTableHintText,
+                              hintStyle: const TextStyle(fontSize: 14),
+                              border: InputBorder.none,
                             ),
                           ),
-                          const SizedBox(
-                            width: 20,
-                          ),
-                          Container(
-                            padding: const EdgeInsets.symmetric(horizontal: 4),
-                            height: 40,
-                            width: 240,
-                            decoration: BoxDecoration(
-                              border: Border.all(color: Colors.grey),
-                              borderRadius: BorderRadius.circular(5),
-                            ),
-                            child: const Row(
-                              crossAxisAlignment: CrossAxisAlignment.center,
-                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                              mainAxisSize: MainAxisSize.max,
-                              children: [
-                                Row(
-                                  children: <Widget>[
-                                    Text(PlacedStrings.sortByText),
-                                    SizedBox(
-                                      width: 4,
-                                    ),
-                                    Text(
-                                      'Name',
-                                      style: TextStyle(
-                                          fontWeight: FontWeight.bold),
-                                    ),
-                                  ],
-                                ),
-                                Icon(Icons.keyboard_arrow_down),
-                              ],
-                            ),
-                          ),
-                        ],
+                        ),
                       ),
-                      Row(
-                        crossAxisAlignment: CrossAxisAlignment.center,
-                        mainAxisAlignment: MainAxisAlignment.end,
-                        children: <Widget>[
-                          InkWell(
-                            onTap: () {},
-                            child: Container(
-                              padding: const EdgeInsets.symmetric(
-                                  horizontal: 4),
-                              height: 40,
-                              width: 115,
-                              decoration: BoxDecoration(
-                                  color:
-                                  PlacedColors.PrimaryBlueMain,
-                                  borderRadius: BorderRadius.circular(5)),
-                              child: const Row(
-                                mainAxisAlignment: MainAxisAlignment.center,
-                                children: [
-                                  Icon(Icons.add, color: Colors.white,),
-                                  Text(
-                                    PlacedStrings.addStudent,
-                                    style: TextStyle(color: Colors.white),
-                                  ),
-                                ],
-                              ),
-                            ),
-                          ),
-                          const SizedBox(
-                            width: 10,
-                          ),
-                          InkWell(
-                            onTap: () {
-                              controller.exportToExcel(widget.jobPost.companyName);
-                            },
-                            child: Container(
-                              height: 40,
-                              width: 110,
-                              decoration: BoxDecoration(
-                                  border: Border.all(
-                                      color: PlacedColors.PrimaryBlueMain),
-                                  borderRadius: BorderRadius.circular(5)),
-                              child: Center(
-                                  child: Text(
-                                    PlacedStrings.exportSheet,
-                                    style: TextStyle(
-                                        color: PlacedColors.PrimaryBlueMain),
-                                  )),
-                            ),
-                          ),
-                        ],
+                      InkWell(
+                        onTap: () {
+                          controller.exportToExcel(widget.jobPost.companyName);
+                        },
+                        child: Container(
+                          height: 40,
+                          width: 110,
+                          decoration: BoxDecoration(
+                              border: Border.all(
+                                  color: PlacedColors.PrimaryBlueMain),
+                              borderRadius: BorderRadius.circular(5)),
+                          child: Center(
+                              child: Text(
+                                PlacedStrings.exportSheet,
+                                style: TextStyle(
+                                    color: PlacedColors.PrimaryBlueMain),
+                              )),
+                        ),
                       ),
                     ],
                   ),
@@ -201,7 +130,7 @@ class _JobDetailsState extends State<JobDetails> {
                           columns: [
                             DataColumn(label: Text('SR.NO')),
                             DataColumn(label: Text('Profile')),
-                            DataColumn(label: Text('Name'), onSort: onSort),
+                            DataColumn(label: Text('Name'), onSort: sortName),
                             DataColumn(label: Text('Email')),
                             DataColumn(label: Text('Date of Birth')),
                             DataColumn(label: Text('IU')),
@@ -289,7 +218,7 @@ class _JobDetailsState extends State<JobDetails> {
     );
   }
 
-  void onSort(int columnIndex, bool ascending) {
+  void sortName(int columnIndex, bool ascending) {
     if(columnIndex == 2){
       filteredData.sort((profile1, profile2) => compareString(ascending, profile1.name, profile2.name));
     }

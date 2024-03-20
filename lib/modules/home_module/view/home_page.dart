@@ -118,25 +118,6 @@ class _HomePageState extends State<HomePage> {
                               const SizedBox(
                                 width: 10,
                               ),
-                              InkWell(
-                                onTap: () {
-                                  controller.exportToExcel();
-                                },
-                                child: Container(
-                                  height: 40,
-                                  width: 100,
-                                  decoration: BoxDecoration(
-                                      border: Border.all(
-                                          color: PlacedColors.PrimaryBlueMain),
-                                      borderRadius: BorderRadius.circular(5)),
-                                  child: Center(
-                                      child: Text(
-                                        PlacedStrings.exportSheet,
-                                        style: TextStyle(
-                                            color: PlacedColors.PrimaryBlueMain),
-                                      )),
-                                ),
-                              ),
                             ],
                           ),
                         ],

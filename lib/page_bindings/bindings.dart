@@ -11,11 +11,11 @@ class PageBindings extends Bindings{
   @override
   void dependencies() {
     // TODO: implement dependencies
-    Get.lazyPut<HomeController>(() => HomeController());
+    Get.lazyPut<OverviewController>(() => OverviewController());
     Get.lazyPut<JobController>(() => JobController());
     Get.lazyPut<PostJobController>(() => PostJobController());
     Get.lazyPut<JobDetailController>(() => JobDetailController());
     Get.lazyPut<StudentsController>(() => StudentsController());
-    Get.lazyPut<OverviewController>(() => OverviewController());
+    Get.lazyPut<HomeController>(() => HomeController());
   }
 }

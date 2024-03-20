@@ -8,6 +8,7 @@ import 'package:image_picker/image_picker.dart';
 import 'package:placed_web/appwrite/appwrite_db/appwrite_db.dart';
 import 'package:placed_web/appwrite/storage/storage.dart';
 import 'package:placed_web/model/broadcast_model/boradcast_model.dart';
+import 'package:placed_web/model/filter_model/filter_model.dart';
 import 'package:placed_web/model/job_model/job_model.dart';
 import 'package:placed_web/modules/job_details/controller/job_details_controller.dart';
 import 'package:placed_web/modules/jobs/controller/job_controller.dart';
@@ -36,6 +37,10 @@ class PostJobController extends GetxController{
 
   JobController jobController = Get.find<JobController>();
 
+  Future<void> uploadFilters(Filter filter, String jobId) async{
+    await AppWriteDb.uploadFilter(filter, jobId);
+  }
+
   //To upload logo of the company
   Future<void> uploadPhoto() async{
     bytes.value = await Utils.pickLogo();
@@ -54,7 +59,7 @@ class PostJobController extends GetxController{
     return randomId;
   }
 
-  Future<PlacedResponse> createJobPost() async{
+  Future<PlacedResponse> createJobPost(Filter? filter) async{
     String randomId = generateRandomId();
     AppwriteStorage.uploadFile(bytes.value, randomId, companyName.value);
     AppwriteStorage.uploadDoc(selectedFile.value, randomId);
@@ -72,6 +77,9 @@ class PostJobController extends GetxController{
       logoUrl: AppwriteStorage.getDeptDocViewUrl(randomId),
       pdfUrl: AppwriteStorage.getDeptDocViewUrl(Utils.reverseString(randomId))
     );
+    if(filter != null){
+      AppWriteDb.uploadFilter(filter, randomId);
+    }
     jobController.jobs.add(jobPost);
     AppWriteDb.createJobCollection(jobPost);
     PlacedResponse response = await AppWriteDb.createJob(jobPost);
@@ -93,34 +101,5 @@ class PostJobController extends GetxController{
       pdfUrl: '',
     );
     AppWriteDb.sendBroadCastMessage(msg);
-  }
-
-  Widget getFilters(){
-    return Row(
-      mainAxisSize: MainAxisSize.max,
-      mainAxisAlignment: MainAxisAlignment.start,
-      children: [
-        Column(
-          children: <Widget>[
-            Text('Eligibility Criteria'),
-            const SizedBox(height: 10,),
-            Row(
-              children: <Widget>[
-                Expanded(child: Text('Criteria')),
-                Expanded(child: Text('Condition')),
-                Expanded(child: Text('Value'),),
-              ],
-            ),
-            Row(
-              children: <Widget>[
-                Expanded(child: TextFormField()),
-                Expanded(child: TextFormField()),
-                Expanded(child: TextFormField()),
-              ],
-            ),
-          ],
-        ),
-      ],
-    );
   }
 }

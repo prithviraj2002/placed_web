@@ -17,7 +17,7 @@ class Home extends StatefulWidget {
 
 class _HomeState extends State<Home> {
 
-  int selectedIndex = 2;
+  int selectedIndex = 0;
 
   List<String> pages = [
     'Overview',

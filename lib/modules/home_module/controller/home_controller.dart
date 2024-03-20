@@ -27,31 +27,6 @@ class HomeController extends GetxController {
     }
   }
 
-   void exportToExcel() {
-    var excel = Excel.createExcel();
-    var sheet = excel['Master Data'];
-    List<TextCellValue> dataRow = [];
-
-    sheet.appendRow([
-      const TextCellValue('Name'),
-      const TextCellValue('IU Number'),
-      const TextCellValue('Email'),
-      const TextCellValue('Branch'),
-      const TextCellValue('Semester'),
-      const TextCellValue('CGPA'),
-    ]);
-
-    for (var profile in profiles) {
-      for(String value in profile.toList()){
-        dataRow.add(TextCellValue(value));
-      }
-      sheet.appendRow(dataRow);
-      dataRow = [];
-    }
-
-    excel.save(fileName: 'student_master_data.xlsx');
-  }
-
   void listenToProfiles() {
     final realtime = Realtime(AppWriteDb.client);
     subscription = realtime
@@ -64,7 +39,7 @@ class HomeController extends GetxController {
               "databases.${AppWriteConstants.dbID}.collections.${AppWriteConstants.profileCollectionsId}.documents.*.create")) {
             profiles.add(Profile.fromJson(event.payload, event.payload["\$id"]));
           } else if (event.events.contains(
-              "databases.${AppWriteConstants.dbID}.collections.${AppWriteConstants.profileCollectionsId}.documents.*.create")) {
+              "databases.${AppWriteConstants.dbID}.collections.${AppWriteConstants.profileCollectionsId}.documents.*.delete")) {
             getProfiles();
           }
         });
@@ -81,3 +56,29 @@ class HomeController extends GetxController {
     closeSubscription();
   }
 }
+
+
+  //void exportToExcel() {
+  //   var excel = Excel.createExcel();
+  //   var sheet = excel['Master Data'];
+  //   List<TextCellValue> dataRow = [];
+  //
+  //   sheet.appendRow([
+  //     const TextCellValue('Name'),
+  //     const TextCellValue('IU Number'),
+  //     const TextCellValue('Email'),
+  //     const TextCellValue('Branch'),
+  //     const TextCellValue('Semester'),
+  //     const TextCellValue('CGPA'),
+  //   ]);
+  //
+  //   for (var profile in profiles) {
+  //     for(String value in profile.toList()){
+  //       dataRow.add(TextCellValue(value));
+  //     }
+  //     sheet.appendRow(dataRow);
+  //     dataRow = [];
+  //   }
+  //
+  //   excel.save(fileName: 'student_master_data.xlsx');
+  // }

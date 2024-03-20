@@ -67,116 +67,46 @@ class _StudentsPageState extends State<StudentsPage> {
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: <Widget>[
-                      Row(
-                        mainAxisSize: MainAxisSize.min,
-                        mainAxisAlignment: MainAxisAlignment.start,
-                        children: [
-                          Container(
-                            height: 40,
-                            width: 240,
-                            decoration: BoxDecoration(
-                              borderRadius: BorderRadius.circular(5),
-                              color: Colors.black12,
-                            ),
-                            child: Center(
-                              child: TextFormField(
-                                onChanged: _onSearchTextChanged,
-                                decoration: InputDecoration(
-                                  prefix: InkWell(
-                                    onTap: () {},
-                                    child: const Icon(Icons.search),
-                                  ),
-                                  hintText: PlacedStrings.searchTableHintText,
-                                  hintStyle: const TextStyle(fontSize: 14),
-                                  border: InputBorder.none,
-                                ),
+                      Container(
+                        height: 40,
+                        width: 240,
+                        decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(5),
+                          color: Colors.black12,
+                        ),
+                        child: Center(
+                          child: TextFormField(
+                            onChanged: _onSearchTextChanged,
+                            decoration: InputDecoration(
+                              prefix: InkWell(
+                                onTap: () {},
+                                child: const Icon(Icons.search),
                               ),
+                              hintText: PlacedStrings.searchTableHintText,
+                              hintStyle: const TextStyle(fontSize: 14),
+                              border: InputBorder.none,
                             ),
                           ),
-                          const SizedBox(
-                            width: 20,
-                          ),
-                          Container(
-                            padding: const EdgeInsets.symmetric(horizontal: 4),
-                            height: 40,
-                            width: 240,
-                            decoration: BoxDecoration(
-                              border: Border.all(color: Colors.grey),
-                              borderRadius: BorderRadius.circular(5),
-                            ),
-                            child: const Row(
-                              crossAxisAlignment: CrossAxisAlignment.center,
-                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                              mainAxisSize: MainAxisSize.max,
-                              children: [
-                                Row(
-                                  children: <Widget>[
-                                    Text(PlacedStrings.sortByText),
-                                    SizedBox(
-                                      width: 4,
-                                    ),
-                                    Text(
-                                      'Name',
-                                      style: TextStyle(
-                                          fontWeight: FontWeight.bold),
-                                    ),
-                                  ],
-                                ),
-                                Icon(Icons.keyboard_arrow_down),
-                              ],
-                            ),
-                          ),
-                        ],
+                        ),
                       ),
-                      Row(
-                        crossAxisAlignment: CrossAxisAlignment.center,
-                        mainAxisAlignment: MainAxisAlignment.end,
-                        children: <Widget>[
-                          InkWell(
-                            onTap: () {},
-                            child: Container(
-                              padding: const EdgeInsets.symmetric(horizontal: 4),
-                              height: 40,
-                              width: 115,
-                              decoration: BoxDecoration(
-                                  color:
-                                  PlacedColors.PrimaryBlueMain,
-                                  borderRadius: BorderRadius.circular(5)),
-                              child: Row(
-                                mainAxisAlignment: MainAxisAlignment.center,
-                                children: [
-                                  Icon(Icons.add, color: Colors.white,),
-                                  Text(
-                                    PlacedStrings.addStudent,
-                                    style: TextStyle(color: Colors.white),
-                                  ),
-                                ],
-                              ),
-                            ),
-                          ),
-                          const SizedBox(
-                            width: 10,
-                          ),
-                          InkWell(
-                            onTap: () {
-                              controller.exportToExcel();
-                            },
-                            child: Container(
-                              height: 40,
-                              width: 110,
-                              decoration: BoxDecoration(
-                                  border: Border.all(
-                                      color: PlacedColors.PrimaryBlueMain),
-                                  borderRadius: BorderRadius.circular(5)),
-                              child: Center(
-                                  child: Text(
-                                    PlacedStrings.exportSheet,
-                                    style: TextStyle(
-                                        color: PlacedColors.PrimaryBlueMain),
-                                  )),
-                            ),
-                          ),
-                        ],
+                      InkWell(
+                        onTap: () {
+                          controller.exportToExcel();
+                        },
+                        child: Container(
+                          height: 40,
+                          width: 110,
+                          decoration: BoxDecoration(
+                              border: Border.all(
+                                  color: PlacedColors.PrimaryBlueMain),
+                              borderRadius: BorderRadius.circular(5)),
+                          child: Center(
+                              child: Text(
+                                PlacedStrings.exportSheet,
+                                style: TextStyle(
+                                    color: PlacedColors.PrimaryBlueMain),
+                              )),
+                        ),
                       ),
                     ],
                   ),
