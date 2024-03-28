@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:placed_web/modules/job_details/view/job_details_page.dart';
 import 'package:placed_web/modules/jobs/controller/job_controller.dart';
 import 'package:placed_web/ui/job_details_dialog/job_details_dialogue.dart';
@@ -14,16 +15,16 @@ class Jobs extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text(
-          'Job Applicants',
-          style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
-        ),
+        title: Container(
+          margin: EdgeInsets.fromLTRB(24, 76, 0, 24),
+          child: Text('Job Applicants', style: GoogleFonts.poppins(
+              fontWeight: FontWeight.w700, fontSize: 24),),),
       ),
       body: Obx(() {
         return jobController.jobs.isNotEmpty && !jobController.isLoading
             ? Container(
                 padding:
-                    const EdgeInsets.symmetric(vertical: 10, horizontal: 10),
+                    const EdgeInsets.fromLTRB(24, 76, 0, 24),
                 child: ListView.separated(
                     itemBuilder: (ctx, index) {
                       return InkWell(

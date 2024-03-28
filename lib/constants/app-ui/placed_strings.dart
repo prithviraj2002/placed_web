@@ -9,6 +9,7 @@ class PlacedStrings{
   static const String searchTableHintText = 'Search Table';
   static const String sortByText = 'Sort by:';
   static const String jobApplicants = 'Job Applicants';
+  static const String Drives = 'Drives';
   static const String postAJob = 'Post a Job';
   static const String importSheet = 'Import Sheet';
   static const String companyLogo = 'Company Logo';
