@@ -13,6 +13,7 @@ import 'package:placed_web/modules/home_module/view/home.dart';
 import 'package:placed_web/modules/post_a_job_module/controller/post_job_controller.dart';
 import 'package:intl/intl.dart';
 import 'package:placed_web/utils/utils.dart';
+import 'package:placed_web/widgets/filter_dialogue/filter_dialog.dart';
 
 class PostJob extends StatefulWidget {
   const PostJob({super.key});
@@ -123,7 +124,9 @@ class _PostJobState extends State<PostJob> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: PlacedColors.backgroundWhite,
       appBar: AppBar(
+        backgroundColor: PlacedColors.backgroundWhite,
         elevation: 0,
         scrolledUnderElevation: 0,
         surfaceTintColor: Colors.transparent,
@@ -149,61 +152,65 @@ class _PostJobState extends State<PostJob> {
               ),
               Container(
                   height: 200,
-                  width: MediaQuery.of(context).size.width * 0.7,
+                  width: MediaQuery
+                      .of(context)
+                      .size
+                      .width * 0.7,
                   decoration: BoxDecoration(
                       border: Border.all(style: BorderStyle.solid),
                       borderRadius: BorderRadius.circular(10)),
                   child: Obx(
-                    () => controller.bytes.value.isEmpty
+                        () =>
+                    controller.bytes.value.isEmpty
                         ? Center(
-                            child: Column(
-                              mainAxisSize: MainAxisSize.max,
-                              mainAxisAlignment: MainAxisAlignment.center,
-                              children: <Widget>[
-                                OutlinedButton(
-                                    onPressed: () {
-                                      controller.uploadPhoto();
-                                    },
-                                    child:
-                                        const Text(PlacedStrings.uploadLogo)),
-                                const SizedBox(
-                                  height: 10,
-                                ),
-                                const Text('PNG, JPG and JPEG are supported'),
-                              ],
-                            ),
-                          )
+                      child: Column(
+                        mainAxisSize: MainAxisSize.max,
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: <Widget>[
+                          OutlinedButton(
+                              onPressed: () {
+                                controller.uploadPhoto();
+                              },
+                              child:
+                              const Text(PlacedStrings.uploadLogo)),
+                          const SizedBox(
+                            height: 10,
+                          ),
+                          const Text('PNG, JPG and JPEG are supported'),
+                        ],
+                      ),
+                    )
                         : Center(
-                            child: Column(
-                              mainAxisSize: MainAxisSize.max,
-                              mainAxisAlignment: MainAxisAlignment.center,
-                              children: <Widget>[
-                                Container(
-                                  height: 50,
-                                  width: 50,
-                                  decoration:
-                                      BoxDecoration(shape: BoxShape.circle),
-                                  child: Image.memory(
-                                    controller.bytes.value,
-                                    scale: 10,
-                                  ),
-                                ),
-                                const SizedBox(
-                                  height: 10,
-                                ),
-                                TextButton(
-                                    onPressed: () {
-                                      controller.bytes.value = Uint8List(0);
-                                    },
-                                    child: Text(
-                                      'Clear',
-                                      style: TextStyle(
-                                          color: Colors.blue,
-                                          decoration: TextDecoration.underline),
-                                    ))
-                              ],
+                      child: Column(
+                        mainAxisSize: MainAxisSize.max,
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: <Widget>[
+                          Container(
+                            height: 50,
+                            width: 50,
+                            decoration:
+                            BoxDecoration(shape: BoxShape.circle),
+                            child: Image.memory(
+                              controller.bytes.value,
+                              scale: 10,
                             ),
                           ),
+                          const SizedBox(
+                            height: 10,
+                          ),
+                          TextButton(
+                              onPressed: () {
+                                controller.bytes.value = Uint8List(0);
+                              },
+                              child: Text(
+                                'Clear',
+                                style: TextStyle(
+                                    color: Colors.blue,
+                                    decoration: TextDecoration.underline),
+                              ))
+                        ],
+                      ),
+                    ),
                   )),
               const SizedBox(
                 height: 20,
@@ -215,7 +222,7 @@ class _PostJobState extends State<PostJob> {
                     child: Text(
                       PlacedStrings.companyName,
                       style:
-                          TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+                      TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
                     ),
                   ),
                   const SizedBox(
@@ -225,7 +232,7 @@ class _PostJobState extends State<PostJob> {
                     child: Text(
                       PlacedStrings.jobTitle,
                       style:
-                          TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+                      TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
                     ),
                   ),
                 ],
@@ -239,33 +246,33 @@ class _PostJobState extends State<PostJob> {
                 children: <Widget>[
                   Expanded(
                       child: TextFormField(
-                    controller: companyName,
-                    decoration: const InputDecoration(
-                        border: OutlineInputBorder(),
-                        hintText: 'Eg. TATA Consultancy Services'),
-                    validator: (String? name) {
-                      if (name == null || name.isEmpty) {
-                        return 'Cannot have an empty company name';
-                      }
-                      return null;
-                    },
-                  )),
+                        controller: companyName,
+                        decoration: const InputDecoration(
+                            border: OutlineInputBorder(),
+                            hintText: 'Eg. TATA Consultancy Services'),
+                        validator: (String? name) {
+                          if (name == null || name.isEmpty) {
+                            return 'Cannot have an empty company name';
+                          }
+                          return null;
+                        },
+                      )),
                   SizedBox(
                     width: 10,
                   ),
                   Expanded(
                       child: TextFormField(
-                    controller: jobTitle,
-                    decoration: const InputDecoration(
-                        border: OutlineInputBorder(),
-                        hintText: 'Eg. Junior Software Engineer'),
-                    validator: (String? job) {
-                      if (job == null || job.isEmpty) {
-                        return 'Cannot have an empty Job Title';
-                      }
-                      return null;
-                    },
-                  ))
+                        controller: jobTitle,
+                        decoration: const InputDecoration(
+                            border: OutlineInputBorder(),
+                            hintText: 'Eg. Junior Software Engineer'),
+                        validator: (String? job) {
+                          if (job == null || job.isEmpty) {
+                            return 'Cannot have an empty Job Title';
+                          }
+                          return null;
+                        },
+                      ))
                 ],
               ),
               const SizedBox(
@@ -278,7 +285,7 @@ class _PostJobState extends State<PostJob> {
                     child: Text(
                       PlacedStrings.jobType,
                       style:
-                          TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+                      TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
                     ),
                   ),
                   const SizedBox(
@@ -288,7 +295,7 @@ class _PostJobState extends State<PostJob> {
                     child: Text(
                       PlacedStrings.jobLocation,
                       style:
-                          TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+                      TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
                     ),
                   ),
                 ],
@@ -302,33 +309,33 @@ class _PostJobState extends State<PostJob> {
                 children: <Widget>[
                   Expanded(
                       child: TextFormField(
-                    controller: jobType,
-                    decoration: const InputDecoration(
-                        border: OutlineInputBorder(),
-                        hintText: 'Eg. Full time, Part time'),
-                    validator: (String? name) {
-                      if (name == null || name.isEmpty) {
-                        return 'Cannot have an empty company name';
-                      }
-                      return null;
-                    },
-                  )),
+                        controller: jobType,
+                        decoration: const InputDecoration(
+                            border: OutlineInputBorder(),
+                            hintText: 'Eg. Full time, Part time'),
+                        validator: (String? name) {
+                          if (name == null || name.isEmpty) {
+                            return 'Cannot have an empty company name';
+                          }
+                          return null;
+                        },
+                      )),
                   const SizedBox(
                     width: 10,
                   ),
                   Expanded(
                       child: TextFormField(
-                    controller: jobLocation,
-                    decoration: const InputDecoration(
-                        border: OutlineInputBorder(),
-                        hintText: 'Eg. Ahmedabad, Bangalore'),
-                    validator: (String? job) {
-                      if (job == null || job.isEmpty) {
-                        return 'Cannot have an empty Job Title';
-                      }
-                      return null;
-                    },
-                  ))
+                        controller: jobLocation,
+                        decoration: const InputDecoration(
+                            border: OutlineInputBorder(),
+                            hintText: 'Eg. Ahmedabad, Bangalore'),
+                        validator: (String? job) {
+                          if (job == null || job.isEmpty) {
+                            return 'Cannot have an empty Job Title';
+                          }
+                          return null;
+                        },
+                      ))
                 ],
               ),
               const SizedBox(
@@ -347,25 +354,25 @@ class _PostJobState extends State<PostJob> {
                 children: <Widget>[
                   Expanded(
                       child: TextFormField(
-                    controller: packageStartRange,
-                    decoration: const InputDecoration(
-                        border: OutlineInputBorder(), hintText: 'From'),
-                    validator: (String? name) {
-                      if (name == null || name.isEmpty) {
-                        return 'Cannot have an empty package range';
-                      }
-                      return null;
-                    },
-                  )),
+                        controller: packageStartRange,
+                        decoration: const InputDecoration(
+                            border: OutlineInputBorder(), hintText: 'From'),
+                        validator: (String? name) {
+                          if (name == null || name.isEmpty) {
+                            return 'Cannot have an empty package range';
+                          }
+                          return null;
+                        },
+                      )),
                   const SizedBox(
                     width: 10,
                   ),
                   Expanded(
                       child: TextFormField(
-                    controller: packageEndRange,
-                    decoration: const InputDecoration(
-                        border: OutlineInputBorder(), hintText: 'To'),
-                  ))
+                        controller: packageEndRange,
+                        decoration: const InputDecoration(
+                            border: OutlineInputBorder(), hintText: 'To'),
+                      ))
                 ],
               ),
               const SizedBox(
@@ -417,27 +424,27 @@ class _PostJobState extends State<PostJob> {
               ),
               Expanded(
                   child: Container(
-                padding:
+                    padding:
                     const EdgeInsets.symmetric(vertical: 4, horizontal: 10),
-                height: 300,
-                decoration: BoxDecoration(
-                  border: Border.all(color: Colors.grey),
-                  borderRadius: BorderRadius.circular(10),
-                ),
-                child: TextFormField(
-                  maxLines: null,
-                  controller: descriptionController,
-                  decoration: const InputDecoration(
-                      border: InputBorder.none,
-                      hintText: 'Mention any other relevant job details here'),
-                  validator: (String? job) {
-                    if (job == null || job.isEmpty) {
-                      return 'Cannot have an empty description';
-                    }
-                    return null;
-                  },
-                ),
-              )),
+                    height: 300,
+                    decoration: BoxDecoration(
+                      border: Border.all(color: Colors.grey),
+                      borderRadius: BorderRadius.circular(10),
+                    ),
+                    child: TextFormField(
+                      maxLines: null,
+                      controller: descriptionController,
+                      decoration: const InputDecoration(
+                          border: InputBorder.none,
+                          hintText: 'Mention any other relevant job details here'),
+                      validator: (String? job) {
+                        if (job == null || job.isEmpty) {
+                          return 'Cannot have an empty description';
+                        }
+                        return null;
+                      },
+                    ),
+                  )),
               const SizedBox(
                 height: 20,
               ),
@@ -463,7 +470,8 @@ class _PostJobState extends State<PostJob> {
                       border: OutlineInputBorder(),
                       hintText: controller.selectedFile.value.name.isEmpty
                           ? 'Select Documents (PDF, JPG, PNG supported)'
-                          : '${controller.selectedFile.value.name} file selected',
+                          : '${controller.selectedFile.value
+                          .name} file selected',
                     ),
                   );
                 })),
@@ -480,7 +488,7 @@ class _PostJobState extends State<PostJob> {
                     Text(
                       'Eligibility Criteria',
                       style:
-                          TextStyle(fontWeight: FontWeight.bold, fontSize: 20),
+                      TextStyle(fontWeight: FontWeight.bold, fontSize: 20),
                     ),
                     const SizedBox(
                       height: 10,
@@ -494,9 +502,9 @@ class _PostJobState extends State<PostJob> {
                                 children: <Widget>[
                                   Expanded(
                                       child: Text(
-                                    'Criteria',
-                                    style: TextStyle(fontSize: 16),
-                                  )),
+                                        'Criteria',
+                                        style: TextStyle(fontSize: 16),
+                                      )),
                                   const SizedBox(
                                     width: 20,
                                   ),
@@ -524,37 +532,45 @@ class _PostJobState extends State<PostJob> {
                                 children: <Widget>[
                                   Expanded(
                                     child: Container(
-                                      padding: const EdgeInsets.symmetric(horizontal: 4),
+                                      padding: const EdgeInsets.symmetric(
+                                          horizontal: 4),
                                       decoration: BoxDecoration(
                                           border:
-                                              Border.all(color: Colors.grey),
+                                          Border.all(color: Colors.grey),
                                           borderRadius:
-                                              BorderRadius.circular(2)),
+                                          BorderRadius.circular(2)),
                                       child: DropdownButton(
                                         items: List.generate(
                                             availableOptions().length,
-                                            (index) => DropdownMenuItem<String>(
+                                                (index) =>
+                                                DropdownMenuItem<String>(
                                                   child: Text(
                                                       availableOptions()[index]),
                                                   value: availableOptions()[index],
                                                 )),
                                         onChanged: (String? selectedValue) {
                                           // Handle change in selected value
-                                            setState(() {
-                                              selectedOption = availableOptions().indexOf(selectedValue!);
-                                            });
-                                          },
+                                          setState(() {
+                                            selectedOption =
+                                                availableOptions().indexOf(
+                                                    selectedValue!);
+                                          });
+                                        },
                                         underline: Container(),
                                         hint: Text('Select Criteria'),
                                         icon: Row(
-                                          mainAxisAlignment: MainAxisAlignment.end,
+                                          mainAxisAlignment: MainAxisAlignment
+                                              .end,
                                           children: <Widget>[
-                                            Icon(Icons.keyboard_arrow_down_outlined)
+                                            Icon(Icons
+                                                .keyboard_arrow_down_outlined)
                                           ],
                                         ),
-                                          value: selectedOption >= 0 && selectedOption < availableOptions().length
-                                              ? availableOptions()[selectedOption]
-                                              : null,
+                                        value: selectedOption >= 0 &&
+                                            selectedOption <
+                                                availableOptions().length
+                                            ? availableOptions()[selectedOption]
+                                            : null,
                                       ),
                                     ),
                                   ),
@@ -563,36 +579,41 @@ class _PostJobState extends State<PostJob> {
                                   ),
                                   Expanded(
                                     child: Container(
-                                      padding: const EdgeInsets.symmetric(horizontal: 4),
+                                      padding: const EdgeInsets.symmetric(
+                                          horizontal: 4),
                                       decoration: BoxDecoration(
                                           border:
-                                              Border.all(color: Colors.grey),
+                                          Border.all(color: Colors.grey),
                                           borderRadius:
-                                              BorderRadius.circular(2)),
+                                          BorderRadius.circular(2)),
                                       child: DropdownButton(
-                                          items: List.generate(
-                                              conditions.length,
-                                              (index) =>
-                                                  DropdownMenuItem<String>(
-                                                    child:
-                                                        Text(conditions[index]),
-                                                    value: conditions[index],
-                                                  )),
-                                          onChanged: (String? selectedValue) {
-                                            // Handle change in selected value
-                                              setState(() {
-                                                selectedCondition = conditions.indexOf(selectedValue!);
-                                              });
-                                            },
-                                          hint: Text('Select Condition'),
-                                          value: conditions[selectedCondition],
-                                          underline: Container(),
-                                          icon: Row(
-                                            mainAxisAlignment: MainAxisAlignment.end,
-                                            children: <Widget>[
-                                              Icon(Icons.keyboard_arrow_down_outlined)
-                                            ],
-                                          ),),
+                                        items: List.generate(
+                                            conditions.length,
+                                                (index) =>
+                                                DropdownMenuItem<String>(
+                                                  child:
+                                                  Text(conditions[index]),
+                                                  value: conditions[index],
+                                                )),
+                                        onChanged: (String? selectedValue) {
+                                          // Handle change in selected value
+                                          setState(() {
+                                            selectedCondition =
+                                                conditions.indexOf(
+                                                    selectedValue!);
+                                          });
+                                        },
+                                        hint: Text('Select Condition'),
+                                        value: conditions[selectedCondition],
+                                        underline: Container(),
+                                        icon: Row(
+                                          mainAxisAlignment: MainAxisAlignment
+                                              .end,
+                                          children: <Widget>[
+                                            Icon(Icons
+                                                .keyboard_arrow_down_outlined)
+                                          ],
+                                        ),),
                                     ),
                                   ),
                                   const SizedBox(
@@ -600,12 +621,12 @@ class _PostJobState extends State<PostJob> {
                                   ),
                                   Expanded(
                                       child: TextFormField(
-                                    controller:
+                                        controller:
                                         valueControllers[filterCount],
-                                    decoration: const InputDecoration(
-                                        border: OutlineInputBorder(),
-                                        hintText: 'Value'),
-                                  )),
+                                        decoration: const InputDecoration(
+                                            border: OutlineInputBorder(),
+                                            hintText: 'Value'),
+                                      )),
                                 ],
                               ),
                             ],
@@ -620,22 +641,23 @@ class _PostJobState extends State<PostJob> {
                     const SizedBox(height: 4,),
                     filterCount > 0
                         ? TextButton(
-                            onPressed: () {
-                              filters[availableOptions()[selectedOption]] = valueControllers[filterCount].text;
-                              addFilter(availableOptions()[selectedOption]);
-                              print('selected filters: ${filters.keys}');
-                              print('selected filters: ${filters.values}');
-                              increaseFilterCount();
-                              setState((){
-                                selectedOption = 0;
-                              });
-                            },
-                            child: Text(
-                              'Add another',
-                              style: TextStyle(
-                                  color: PlacedColors.PrimaryBlueDark,
-                                  fontSize: 20),
-                            ))
+                        onPressed: () {
+                          filters[availableOptions()[selectedOption]] =
+                              valueControllers[filterCount].text;
+                          addFilter(availableOptions()[selectedOption]);
+                          print('selected filters: ${filters.keys}');
+                          print('selected filters: ${filters.values}');
+                          increaseFilterCount();
+                          setState(() {
+                            selectedOption = 0;
+                          });
+                        },
+                        child: Text(
+                          'Add another',
+                          style: TextStyle(
+                              color: PlacedColors.PrimaryBlueDark,
+                              fontSize: 20),
+                        ))
                         : Container()
                   ],
                 ),
@@ -648,14 +670,19 @@ class _PostJobState extends State<PostJob> {
                       filterCount > 0
                           ? Container()
                           : TextButton(
-                              onPressed: () {
-                                increaseFilterCount();
-                              },
-                              child: Text(
-                                PlacedStrings.addEligibility,
-                                style:
-                                    TextStyle(fontSize: 16, color: Colors.blue),
-                              )),
+                          onPressed: () {
+                            // increaseFilterCount();
+                            showDialog(context: context, builder: (ctx) {
+                              return FilterDialog();
+                            });
+                          },
+                          child: Text(
+                            PlacedStrings
+                                .addEligibility,
+                            style:
+                            TextStyle(fontSize: 16, color: Colors.blue),
+                          )
+                      ),
                       InkWell(
                         onTap: () {
                           if (formKey.currentState!.validate() &&
@@ -679,10 +706,11 @@ class _PostJobState extends State<PostJob> {
                                       return AlertDialog(
                                         surfaceTintColor: Colors.white,
                                         title: Text(
-                                            'Creating job post for ${companyName.text}'),
+                                            'Creating job post for ${companyName
+                                                .text}'),
                                         content: Row(
                                           mainAxisAlignment:
-                                              MainAxisAlignment.center,
+                                          MainAxisAlignment.center,
                                           children: <Widget>[
                                             CircularProgressIndicator()
                                           ],
@@ -694,7 +722,7 @@ class _PostJobState extends State<PostJob> {
                                       context,
                                       MaterialPageRoute(
                                           builder: (ctx) => Home()),
-                                      (route) => false);
+                                          (route) => false);
                                 });
                               } else if (!value.success) {
                                 showDialog(
@@ -704,7 +732,7 @@ class _PostJobState extends State<PostJob> {
                                           surfaceTintColor: Colors.white,
                                           title: Text('An error occurred!'),
                                           content:
-                                              Text(value.error.toString()));
+                                          Text(value.error.toString()));
                                     });
                               }
                             });

@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'dart:html' as html;
 
 import 'package:placed_web/appwrite/appwrite_auth/appwrite_auth.dart';
+import 'package:placed_web/constants/app-ui/placed_colors.dart';
 
 class PasswordRecoveryPage extends StatefulWidget {
   const PasswordRecoveryPage({super.key});
@@ -46,6 +47,7 @@ class _PasswordRecoveryPageState extends State<PasswordRecoveryPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: PlacedColors.backgroundWhite,
       appBar: AppBar(
         title: const Text('Placed Password Recovery')
       ),

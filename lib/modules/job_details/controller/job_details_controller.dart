@@ -26,6 +26,7 @@ class JobDetailController extends GetxController{
   Rx<PlatformFile> selectedFile = PlatformFile(name: fileName.value, size: fileSize.value).obs;
   static Rx<String> fileName = ''.obs;
   static Rx<int> fileSize = 0.obs;
+  Rx<Profile> selectedProfile = Profile(name: 'name', id: 'id', email: 'email', dateOfBirth: 'dateOfBirth', IU: 'IU', phoneNumber: 'phoneNumber', course: 'course', degree: 'degree', year: 4, sem: 5, XMarks: 90, XPassingYear: '2018', gender: 'gender', board: 'board', engYearOfPassing: 'engYearOfPassing', cgpa: 8.0, activeBackLog: 0, totalBackLog: 0, address: 'address', status: true).obs;
 
   @override
   void onInit() {
@@ -40,7 +41,12 @@ class JobDetailController extends GetxController{
     listenToProfiles();
   }
 
+  void selectStudent(Profile profile){
+    selectedProfile.value = profile;
+  }
+
   void getProfiles(String jobId) async{
+    profiles.value = [];
     profiles.value = await AppWriteDb.getProfilesFromJobId(jobId);
     isLoading = false;
     jobId = jobId;

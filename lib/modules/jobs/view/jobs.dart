@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:placed_web/constants/app-ui/placed_colors.dart';
 import 'package:placed_web/modules/job_details/view/job_details_page.dart';
 import 'package:placed_web/modules/jobs/controller/job_controller.dart';
 import 'package:placed_web/ui/job_details_dialog/job_details_dialogue.dart';
@@ -13,7 +14,9 @@ class Jobs extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: PlacedColors.backgroundWhite,
       appBar: AppBar(
+        backgroundColor: PlacedColors.backgroundWhite,
         title: const Text(
           'Job Applicants',
           style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),

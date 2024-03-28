@@ -9,6 +9,8 @@ class PlacedColors{
   static Color textColor = Color(0xFF0B2A7F);
   static Color textfield_text_color = Colors.black54;
 
+  static Color backgroundWhite = Color(0xffF6F6F6);
+  static Color CardShadowBlack = Color(0xff1C1C1C).withOpacity(0.08);
 
   static Color PrimaryBlack = Color(0xFF1C1C1C);
   static Color PrimaryGrey1 = Color(0xFF494949);
@@ -27,6 +29,19 @@ class PlacedColors{
   static Color PrimaryBlueLight2 = Color(0xFFF1F5FA);
   static Color PrimaryWhite = Color(0xFFFFFFFF);
   static Color PrimaryOffWhite = Color(0xFFF7F9FB);
+
+  //Pie chart colors
+  static Color PieChartYellow = Color(0xFFF9B90B);
+  static Color PieChartBlue = Color(0xff3269FF);
+  static Color PieChartLightBlue = Color(0xFF00B6F3);
+  static Color PieChartOrange = Color(0xffFF7F09);
+
+  static List<Color> pieChartColors = [
+    PieChartYellow,
+    PieChartBlue,
+    PieChartLightBlue,
+    PieChartOrange
+  ];
 
   static Color SecondaryGreen = Color(0xFF00A669);
   static Color SecondaryGreen2 = Color(0xFF39B070);

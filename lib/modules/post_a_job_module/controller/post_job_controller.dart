@@ -34,6 +34,7 @@ class PostJobController extends GetxController{
   Rx<PlatformFile> selectedFile = PlatformFile(name: fileName.value, size: fileSize.value).obs;
   static Rx<String> fileName = ''.obs;
   static Rx<int> fileSize = 0.obs;
+  Rx<Filter> filter = Filter().obs;
 
   JobController jobController = Get.find<JobController>();
 

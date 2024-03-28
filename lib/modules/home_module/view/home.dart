@@ -9,7 +9,8 @@ import 'package:placed_web/modules/students/view/students.dart';
 import 'package:placed_web/modules/students/view/students_page.dart';
 
 class Home extends StatefulWidget {
-  const Home({super.key});
+  int selectedIndex;
+  Home({this.selectedIndex = 0,super.key});
 
   @override
   State<Home> createState() => _HomeState();

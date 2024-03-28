@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:placed_web/appwrite/appwrite_db/appwrite_db.dart';
 import 'package:placed_web/model/job_model/job_model.dart';
+import 'package:placed_web/model/profile_model/profile_model.dart';
 
 class JobController extends GetxController{
   RxList<JobPost> jobs = <JobPost>[].obs;

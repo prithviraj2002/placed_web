@@ -8,6 +8,7 @@ import 'package:placed_web/model/profile_model/profile_model.dart';
 import 'package:placed_web/modules/job_details/controller/job_details_controller.dart';
 import 'package:placed_web/ui/closed_FAB/closed_fab.dart';
 import 'package:placed_web/ui/expanded_FAB/expanded_fab.dart';
+import 'package:placed_web/widgets/end_drawer/end_drawer.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 class JobDetails extends StatefulWidget {
@@ -58,6 +59,11 @@ class _JobDetailsState extends State<JobDetails> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      key: drawerKey,
+        backgroundColor: PlacedColors.backgroundWhite,
+        endDrawer: Obx(() {
+          return StudentDrawer(profile: controller.selectedProfile.value);
+        }),
         appBar: AppBar(
           title: Text(
             widget.jobPost.companyName,
@@ -147,15 +153,30 @@ class _JobDetailsState extends State<JobDetails> {
                                 cells: [
                               DataCell(Text('${index + 1}')),
                               DataCell(
-                                  Container(
-                                    decoration: BoxDecoration(
-                                        border: Border.all(color: Colors.grey),
-                                        shape: BoxShape.circle
-                                    ),
-                                    child: CircleAvatar(
-                                      radius: 50, // Adjust the radius as needed
-                                      backgroundColor: Colors.transparent, // Make the background transparent
-                                      backgroundImage: NetworkImage(AppwriteStorage.getImageViewUrl(profile.id), scale: 10, ),
+                                  InkWell(
+                                    onTap: (){
+                                      if (!drawerKey.currentState!
+                                          .isEndDrawerOpen) {
+                                        controller.selectedProfile.value =
+                                            profile;
+                                        drawerKey.currentState!
+                                            .openEndDrawer();
+                                      }
+                                      else {
+                                        drawerKey.currentState!
+                                            .closeEndDrawer();
+                                      }
+                                    },
+                                    child: Container(
+                                      decoration: BoxDecoration(
+                                          border: Border.all(color: Colors.grey),
+                                          shape: BoxShape.circle
+                                      ),
+                                      child: CircleAvatar(
+                                        radius: 50, // Adjust the radius as needed
+                                        backgroundColor: Colors.transparent, // Make the background transparent
+                                        backgroundImage: NetworkImage(AppwriteStorage.getImageViewUrl(profile.id), scale: 10, ),
+                                      ),
                                     ),
                                   )
                               ),

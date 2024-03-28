@@ -36,6 +36,21 @@ class AppWriteDb {
     }
   }
 
+  static Future<Document> blockAccount(Profile profile) async{
+    try{
+      final response = await databases.updateDocument(
+          databaseId: AppWriteConstants.dbID,
+          collectionId: AppWriteConstants.profileCollectionsId,
+          documentId: profile.id,
+        data: profile.toMap()
+      );
+      return response;
+    } on AppwriteException catch(e){
+      print('An error occurred while blocking an account!: $e');
+      rethrow;
+    }
+  }
+
   static Future<List<Profile>> getProfilesFromJobId(String jobId) async {
     List<Profile> profiles = [];
     try {
@@ -168,6 +183,19 @@ class AppWriteDb {
       return jobPost;
     } on AppwriteException catch (e) {
       print('An error occurred while getting job by id!: $e');
+      rethrow;
+    }
+  }
+
+  static Future<int> getDocsFromCollection(String id) async{
+    try{
+      final DocumentList response = await databases.listDocuments(
+          databaseId: AppWriteConstants.dbID,
+          collectionId: id
+      );
+      return response.total;
+    } on AppwriteException catch(e){
+      print('An error occurred while getting docs from collection!: $e');
       rethrow;
     }
   }
