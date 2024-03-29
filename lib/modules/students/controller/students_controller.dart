@@ -14,6 +14,7 @@ class StudentsController extends GetxController{
   RxList<Profile> profiles = <Profile>[].obs;
   late StreamSubscription<RealtimeMessage> subscription;
   bool isLoading = true;
+  Rx<Profile> selectedProfile = Profile(name: 'name', id: 'id', email: 'email', dateOfBirth: 'dateOfBirth', IU: 'IU', phoneNumber: 'phoneNumber', course: 'course', degree: 'degree', year: 4, sem: 5, XMarks: 90, XPassingYear: '2018', gender: 'gender', board: 'board', engYearOfPassing: 'engYearOfPassing', cgpa: 8.0, activeBackLog: 0, totalBackLog: 0, address: 'address', status: true).obs;
 
   @override
   void onInit() {
@@ -21,6 +22,10 @@ class StudentsController extends GetxController{
     super.onInit();
     getAllProfiles();
     listenToProfiles();
+  }
+
+  void selectStudent(Profile profile){
+    selectedProfile.value = profile;
   }
 
   List<DataRow> getDataRow() {

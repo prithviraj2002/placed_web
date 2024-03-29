@@ -1,6 +1,7 @@
 import 'package:appwrite/appwrite.dart';
 import 'package:appwrite/models.dart';
 import 'package:dart_appwrite/models.dart' as dpm;
+import 'package:get/get.dart';
 import 'package:placed_web/appwrite/appwrite_constants/appwrite_constants.dart';
 import 'package:placed_web/appwrite/storage/storage.dart';
 import 'package:placed_web/model/broadcast_model/boradcast_model.dart';
@@ -31,6 +32,21 @@ class AppWriteDb {
           collectionId: AppWriteConstants.profileCollectionsId);
       return response;
     } on AppwriteException catch (e) {
+      rethrow;
+    }
+  }
+
+  static Future<Document> blockAccount(Profile profile) async{
+    try{
+      final response = await databases.updateDocument(
+          databaseId: AppWriteConstants.dbID,
+          collectionId: AppWriteConstants.profileCollectionsId,
+          documentId: profile.id,
+          data: profile.toMap()
+      );
+      return response;
+    } on AppwriteException catch(e){
+      print('An error occurred while blocking an account!: $e');
       rethrow;
     }
   }
@@ -94,16 +110,16 @@ class AppWriteDb {
       }
       final response = await databases
           .deleteDocument(
-              databaseId: AppWriteConstants.dbID,
-              collectionId: AppWriteConstants.jobsCollectionId,
-              documentId: jobPost.jobId)
+          databaseId: AppWriteConstants.dbID,
+          collectionId: AppWriteConstants.jobsCollectionId,
+          documentId: jobPost.jobId)
           .then((value) {
         serverDatabases.deleteCollection(
             databaseId: AppWriteConstants.dbID, collectionId: jobPost.jobId);
       });
       final DocumentList msgs = await databases.listDocuments(
-          databaseId: AppWriteConstants.dbID,
-          collectionId: AppWriteConstants.broadcastCollectionsId,
+        databaseId: AppWriteConstants.dbID,
+        collectionId: AppWriteConstants.broadcastCollectionsId,
       );
       for(var d in msgs.documents){
         if(d.data['jobId'] == jobPost.jobId){
@@ -167,6 +183,19 @@ class AppWriteDb {
       return jobPost;
     } on AppwriteException catch (e) {
       print('An error occurred while getting job by id!: $e');
+      rethrow;
+    }
+  }
+
+  static Future<int> getDocsFromCollection(String id) async{
+    try{
+      final DocumentList response = await databases.listDocuments(
+          databaseId: AppWriteConstants.dbID,
+          collectionId: id
+      );
+      return response.total;
+    } on AppwriteException catch(e){
+      print('An error occurred while getting docs from collection!: $e');
       rethrow;
     }
   }
@@ -372,12 +401,12 @@ class AppWriteDb {
           documentId: jobPost.jobId,
           data: jobPost.toMap());
       final PlacedResponse placedResponse =
-          PlacedResponse(data: response.data, success: true, error: null);
+      PlacedResponse(data: response.data, success: true, error: null);
       return placedResponse;
     } on AppwriteException catch (e) {
       print('An error occurred while creating job from appwrite db!: $e');
       final PlacedResponse placedResponse =
-          PlacedResponse(data: '', success: false, error: e);
+      PlacedResponse(data: '', success: false, error: e);
       return placedResponse;
     }
   }

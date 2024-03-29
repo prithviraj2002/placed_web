@@ -21,7 +21,7 @@ class Home extends StatefulWidget {
 }
 
 class _HomeState extends State<Home> {
-  int selectedIndex = 2;
+  int selectedIndex = 0;
 
   List<String> pages = [
     'Overview',
@@ -70,11 +70,17 @@ class _HomeState extends State<Home> {
                         margin: EdgeInsets.fromLTRB(0, 32, 37, 30),
                         child: ListTile(
                           leading: Container(
+                            decoration: BoxDecoration(
+                              shape: BoxShape.circle,
+                              color: PlacedColors.PrimaryWhite,
+                            ),
                             width: 24,
                             height: 24,
-                            child: CircleAvatar(
-                              backgroundImage: NetworkImage(
-                                  'https://upload.wikimedia.org/wikipedia/commons/b/b8/New-LOGO-IU4.png'),
+                            child: ClipOval(
+                              child: Center(
+                                child: Image.network(
+                                    'https://upload.wikimedia.org/wikipedia/commons/b/b8/New-LOGO-IU4.png', scale: 0.5,),
+                              ),
                             ),
                           ),
                           title: Text(

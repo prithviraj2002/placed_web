@@ -8,6 +8,7 @@ import 'package:placed_web/constants/app-ui/placed_colors.dart';
 import 'package:placed_web/constants/app-ui/placed_strings.dart';
 import 'package:placed_web/model/profile_model/profile_model.dart';
 import 'package:placed_web/modules/students/controller/students_controller.dart';
+import 'package:placed_web/widgets/end_drawer/end_drawer.dart';
 import 'package:url_launcher/url_launcher.dart';
 import '../../../constants/app-ui/placed_dimens.dart';
 import '../../../widgets/custom_textformfield.dart';
@@ -59,13 +60,18 @@ class _StudentsPageState extends State<StudentsPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      key: drawerKey,
+      backgroundColor: PlacedColors.backgroundWhite,
+      endDrawer: Obx(() {
+        return StudentDrawer(profile: controller.selectedProfile.value);
+      }),
       body: Obx(() {
         if (controller.profiles.isEmpty && !controller.isLoading) {
           return const Center(child: Text('No profiles yet!'));
         }
         else if (controller.profiles.isNotEmpty && !controller.isLoading) {
           return Container(
-            padding: EdgeInsets.fromLTRB(16,0,16, 16),
+            padding: EdgeInsets.fromLTRB(16,0,16,0),
             color: PlacedColors.PrimaryWhiteDark,
             child: SingleChildScrollView(
               scrollDirection: Axis.vertical,
@@ -87,6 +93,7 @@ class _StudentsPageState extends State<StudentsPage> {
                           child: Container(
                             height: 40,
                             width: 130,
+                            padding: const EdgeInsets.all(4),
                             decoration: BoxDecoration(
                                 border: Border.all(
                                     color: PlacedColors.PrimaryBlueMain),
@@ -143,45 +150,45 @@ class _StudentsPageState extends State<StudentsPage> {
                             const SizedBox(
                               width: 20,
                             ),
-                            Container(
-                              height: 40,
-                              width: 240,
-                              decoration: BoxDecoration(
-                                border: Border.all(color: Color(0xFFE5ECF6)),
-                                borderRadius: BorderRadius.circular(5),
-                              ),
-                              child:  Row(
-                                mainAxisAlignment: MainAxisAlignment.spaceAround,
-                                children: [
-                                  Container(
-                                    padding: EdgeInsets.symmetric(vertical: 8, horizontal: 16),
-                                    child: Row(
-                                      children: <Widget>[
-                                        Text(
-                                          PlacedStrings.sortByText,
-                                          style: GoogleFonts.poppins(
-                                            color: PlacedColors.PrimaryGrey4,
-                                          fontWeight: FontWeight.w600,
-                                          fontSize: 12,
-                                        ),),
-                                        SizedBox(
-                                          width: 4,
-                                        ),
-                                        Text(
-                                          'Name',
-                                          style: GoogleFonts.poppins(
-                                              fontWeight: FontWeight.w600,
-                                            fontSize: 12,
-                                          ),
-                                        ),
-                                      ],
-                                    ),
-                                  ),
-                                  VerticalDivider(color: Color(0xFFE5ECF6),),
-                                  Icon(Icons.keyboard_arrow_down),
-                                ],
-                              ),
-                            ),
+                            // Container(
+                            //   height: 40,
+                            //   width: 240,
+                            //   decoration: BoxDecoration(
+                            //     border: Border.all(color: Color(0xFFE5ECF6)),
+                            //     borderRadius: BorderRadius.circular(5),
+                            //   ),
+                            //   child:  Row(
+                            //     mainAxisAlignment: MainAxisAlignment.spaceAround,
+                            //     children: [
+                            //       Container(
+                            //         padding: EdgeInsets.symmetric(vertical: 8, horizontal: 16),
+                            //         child: Row(
+                            //           children: <Widget>[
+                            //             Text(
+                            //               PlacedStrings.sortByText,
+                            //               style: GoogleFonts.poppins(
+                            //                 color: PlacedColors.PrimaryGrey4,
+                            //               fontWeight: FontWeight.w600,
+                            //               fontSize: 12,
+                            //             ),),
+                            //             SizedBox(
+                            //               width: 4,
+                            //             ),
+                            //             Text(
+                            //               'Name',
+                            //               style: GoogleFonts.poppins(
+                            //                   fontWeight: FontWeight.w600,
+                            //                 fontSize: 12,
+                            //               ),
+                            //             ),
+                            //           ],
+                            //         ),
+                            //       ),
+                            //       VerticalDivider(color: Color(0xFFE5ECF6),),
+                            //       Icon(Icons.keyboard_arrow_down),
+                            //     ],
+                            //   ),
+                            // ),
                           ],
                         ),
                         SingleChildScrollView(
@@ -235,7 +242,22 @@ class _StudentsPageState extends State<StudentsPage> {
                                               ),
                                             )
                                         ),
-                                        DataCell(Text(profile.name)),
+                                        DataCell(
+                                            TextButton(onPressed: () {
+                                              if (!drawerKey.currentState!
+                                                  .isEndDrawerOpen) {
+                                                controller.selectedProfile.value =
+                                                    profile;
+                                                drawerKey.currentState!
+                                                    .openEndDrawer();
+                                              }
+                                              else {
+                                                drawerKey.currentState!
+                                                    .closeEndDrawer();
+                                              }
+                                            },
+                                                child: Text(profile.name, style: TextStyle(color: profile.status ? PlacedColors.PrimaryBlueMain : PlacedColors.SecondaryRed),))
+                                        ),
                                         DataCell(Text(profile.email)),
                                         DataCell(Text(profile.dateOfBirth)),
                                         DataCell(Text(profile.IU)),

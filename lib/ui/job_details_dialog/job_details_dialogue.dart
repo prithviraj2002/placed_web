@@ -9,9 +9,9 @@ import 'package:placed_web/modules/jobs/controller/job_controller.dart';
 import 'package:placed_web/utils/utils.dart';
 
 class JobDetailsDialog extends StatefulWidget {
-  JobPost jobPost;
+  JobPost jobPost; bool allowEdit;
 
-  JobDetailsDialog({required this.jobPost, super.key});
+  JobDetailsDialog({required this.jobPost, this.allowEdit = true, super.key});
 
   @override
   State<JobDetailsDialog> createState() => _JobDetailsDialogState();
@@ -112,6 +112,7 @@ class _JobDetailsDialogState extends State<JobDetailsDialog> {
                 Text('Job Title', style: TextStyle(fontSize: 16),),
                 TextFormField(
                   controller: jobTitle,
+                  enabled: widget.allowEdit,
                   decoration: const InputDecoration(
                     border: OutlineInputBorder(),
                   ),
@@ -126,6 +127,7 @@ class _JobDetailsDialogState extends State<JobDetailsDialog> {
                 Text('Company Name', style: TextStyle(fontSize: 16),),
                 TextFormField(
                   controller: companyName,
+                  enabled: widget.allowEdit,
                   decoration: const InputDecoration(
                       border: OutlineInputBorder()
                   ),
@@ -142,6 +144,7 @@ class _JobDetailsDialogState extends State<JobDetailsDialog> {
                   children: [
                     Expanded(
                       child: TextFormField(
+                        enabled: widget.allowEdit,
                         controller: packageStartRange,
                         decoration: const InputDecoration(
                             border: OutlineInputBorder()
@@ -157,6 +160,7 @@ class _JobDetailsDialogState extends State<JobDetailsDialog> {
                     const SizedBox(width: 10,),
                     Expanded(
                       child: TextFormField(
+                        enabled: widget.allowEdit,
                         controller: packageEndRange,
                         decoration: const InputDecoration(
                             border: OutlineInputBorder()
@@ -169,6 +173,7 @@ class _JobDetailsDialogState extends State<JobDetailsDialog> {
                 Text('Job Type', style: TextStyle(fontSize: 16),),
                 TextFormField(
                   controller: jobType,
+                  enabled: widget.allowEdit,
                   decoration: const InputDecoration(
                       border: OutlineInputBorder()
                   ),
@@ -183,6 +188,7 @@ class _JobDetailsDialogState extends State<JobDetailsDialog> {
                 Text('Job Location', style: TextStyle(fontSize: 16),),
                 TextFormField(
                   controller: jobLocation,
+                  enabled: widget.allowEdit,
                   decoration: const InputDecoration(
                       border: OutlineInputBorder()
                   ),
@@ -197,6 +203,7 @@ class _JobDetailsDialogState extends State<JobDetailsDialog> {
                 Text('Last date to Apply', style: TextStyle(fontSize: 16),),
                 TextFormField(
                   controller: lastDateToApply,
+                  enabled: widget.allowEdit,
                   decoration: const InputDecoration(
                       border: OutlineInputBorder()
                   ),
@@ -259,7 +266,7 @@ class _JobDetailsDialogState extends State<JobDetailsDialog> {
                       });
                     }
                   },
-                  child: Container(
+                  child: widget.allowEdit ? Container(
                     height: 50,
                     color: Colors.blue,
                     child: Center(
@@ -267,7 +274,7 @@ class _JobDetailsDialogState extends State<JobDetailsDialog> {
                             .white,
                             fontWeight: FontWeight.bold,
                             fontSize: 18),)),
-                  ),
+                  ) : Container(),
                 )
               ],
             ),
