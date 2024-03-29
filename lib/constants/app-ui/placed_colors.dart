@@ -20,7 +20,7 @@ class PlacedColors{
   static Color PrimaryGrey4 = Color(0XFFC4C4C4);
   static Color PrimaryBlueMain = Color(0xFF3269FF);
   static Color PrimaryBlueLight = Color(0xFF00B6F3);
-  // static Color PrimaryBlueDark = Color(0xFFE5ECF6);
+  static Color PrimaryWhiteDark = Color(0xFFE5ECF6);
   static Color PrimaryBlueDark = Color(0XFF0B2A7F);
   // static Color PrimaryBlueLight1 = Color(0xFFF1F5FA);
   static Color PrimaryBlueLight1 = Color(0xFFE5ECF6);

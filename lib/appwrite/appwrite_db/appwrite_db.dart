@@ -1,7 +1,6 @@
 import 'package:appwrite/appwrite.dart';
 import 'package:appwrite/models.dart';
 import 'package:dart_appwrite/models.dart' as dpm;
-import 'package:get/get.dart';
 import 'package:placed_web/appwrite/appwrite_constants/appwrite_constants.dart';
 import 'package:placed_web/appwrite/storage/storage.dart';
 import 'package:placed_web/model/broadcast_model/boradcast_model.dart';

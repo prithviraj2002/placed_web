@@ -37,6 +37,7 @@ dependencies:
   cupertino_icons: ^1.0.2
   appwrite: ^11.0.1
   get: ^4.6.6
+  google_fonts: ^6.2.1
   excel: ^4.0.2
   uuid: ^4.3.3
   dart_appwrite: ^10.1.1
@@ -75,6 +76,7 @@ flutter:
   # To add assets to your application, add an assets section, like this:
   assets:
     - assets/images/export_sheet.png
+    - assets/
 
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/assets-and-images/#resolution-aware
