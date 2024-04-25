@@ -1,3 +1,4 @@
+import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:placed_web/constants/app-ui/placed_colors.dart';
@@ -140,32 +141,69 @@ class _ExpandedFABState extends State<ExpandedFAB> {
                           vertical: 4, horizontal: 10),
                       decoration: BoxDecoration(
                           border: Border.all(color: Colors.black12),
-                          borderRadius: BorderRadius.circular(100)
+                          borderRadius: BorderRadius.all(Radius.circular(20))
                       ),
-                      child: Row(
-                        children: <Widget>[
-                          Expanded(
-                            child: TextFormField(
-                              maxLines: null,
-                              controller: messageController,
-                              decoration: InputDecoration(
-                                  border: InputBorder.none,
-                                  hintText: 'Send Message...'
+                      child: Column(
+                        children: [
+                          Row(
+                            children: <Widget>[
+                              Expanded(
+                                child: TextFormField(
+                                  maxLines: null,
+                                  controller: messageController,
+                                  decoration: const InputDecoration(
+                                      border: InputBorder.none,
+                                      hintText: 'Send Message...'
+                                  ),
+                                ),
                               ),
-                            ),
+                              InkWell(
+                                onTap: () {
+                                  if (messageController.text.isNotEmpty) {
+                                    controller.sendAnnouncement(messageController.text, widget.jobPost);
+                                    messageController.text = '';
+                                  }
+                                },
+                                child: Icon(Icons.send, color: PlacedColors.PrimaryBlueDark,),
+                              ),
+                              InkWell(
+                                onTap: () {
+                                  controller.uploadDocuments();
+                                },
+                                child: Icon(Icons.attach_file, color: PlacedColors.PrimaryGrey3,),
+                              )
+                            ],
                           ),
-                          IconButton(onPressed: () {
-                            if (messageController.text.isNotEmpty) {
-                              controller.sendAnnouncement(messageController.text, widget.jobPost);
-                              messageController.text = '';
+                          Obx(() {
+                            if(controller.selectedFile.value.name.isNotEmpty){
+                              return Container(
+                                decoration: BoxDecoration(
+                                    border: Border.all(color: Colors.black12),
+                                    borderRadius: BorderRadius.all(Radius.circular(20))
+                                ),
+                                child: Row(
+                                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                  children: [
+                                    const Icon(Icons.file_copy_outlined, size: 50,),
+                                    controller.selectedFile.value.name.length > 20 ? 
+                                    Text(
+                                      controller.selectedFile.value.name.substring(0, 19),
+                                      style: const TextStyle(
+                                        overflow: TextOverflow.fade
+                                      ),
+                                    ) : Text(
+                                      controller.selectedFile.value.name,
+                                    ),
+                                    IconButton(onPressed: () {
+                                      controller.selectedFile.value = PlatformFile(name: "", size: 0);
+                                    }, icon: const Icon(Icons.cancel)),
+                                  ],
+                                ),
+                              );
+                            } else{
+                              return Container();
                             }
-                          }, icon: Icon(Icons.send)),
-                          IconButton(
-                              onPressed: () {
-                                controller.uploadDocuments();
-                              },
-                              icon: Icon(Icons.attach_file)
-                          )
+                          })
                         ],
                       ),
                     ),
@@ -175,9 +213,9 @@ class _ExpandedFABState extends State<ExpandedFAB> {
                   ],
                 ),
               ),
-            ) : controller.announcements.isEmpty ? Center(
+            ) : controller.announcements.isEmpty ? const Center(
               child: Text('No Announcements yet!'),
-            ) : Center(child: CircularProgressIndicator());
+            ) : const Center(child: CircularProgressIndicator());
           })
         ],
       ),

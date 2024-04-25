@@ -40,7 +40,11 @@ class PlacedColors{
     PieChartYellow,
     PieChartBlue,
     PieChartLightBlue,
-    PieChartOrange
+    PieChartOrange,
+    PieChartLightBlue,
+    PieChartBlue,
+    PieChartOrange,
+    PieChartYellow,
   ];
 
   static Color SecondaryGreen = Color(0xFF00A669);

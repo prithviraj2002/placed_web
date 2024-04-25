@@ -150,45 +150,6 @@ class _StudentsPageState extends State<StudentsPage> {
                             const SizedBox(
                               width: 20,
                             ),
-                            // Container(
-                            //   height: 40,
-                            //   width: 240,
-                            //   decoration: BoxDecoration(
-                            //     border: Border.all(color: Color(0xFFE5ECF6)),
-                            //     borderRadius: BorderRadius.circular(5),
-                            //   ),
-                            //   child:  Row(
-                            //     mainAxisAlignment: MainAxisAlignment.spaceAround,
-                            //     children: [
-                            //       Container(
-                            //         padding: EdgeInsets.symmetric(vertical: 8, horizontal: 16),
-                            //         child: Row(
-                            //           children: <Widget>[
-                            //             Text(
-                            //               PlacedStrings.sortByText,
-                            //               style: GoogleFonts.poppins(
-                            //                 color: PlacedColors.PrimaryGrey4,
-                            //               fontWeight: FontWeight.w600,
-                            //               fontSize: 12,
-                            //             ),),
-                            //             SizedBox(
-                            //               width: 4,
-                            //             ),
-                            //             Text(
-                            //               'Name',
-                            //               style: GoogleFonts.poppins(
-                            //                   fontWeight: FontWeight.w600,
-                            //                 fontSize: 12,
-                            //               ),
-                            //             ),
-                            //           ],
-                            //         ),
-                            //       ),
-                            //       VerticalDivider(color: Color(0xFFE5ECF6),),
-                            //       Icon(Icons.keyboard_arrow_down),
-                            //     ],
-                            //   ),
-                            // ),
                           ],
                         ),
                         SingleChildScrollView(

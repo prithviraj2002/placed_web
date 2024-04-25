@@ -1,8 +1,11 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:placed_web/appwrite/appwrite_db/appwrite_db.dart';
 import 'package:placed_web/appwrite/storage/storage.dart';
+import 'package:placed_web/constants/app-ui/placed_colors.dart';
 import 'package:placed_web/model/job_model/job_model.dart';
 import 'package:placed_web/modules/home_module/view/home.dart';
 import 'package:placed_web/modules/jobs/controller/job_controller.dart';
@@ -109,45 +112,79 @@ class _JobDetailsDialogState extends State<JobDetailsDialog> {
                   ),
                 ),
                 const SizedBox(height: 20,),
-                Text('Job Title', style: TextStyle(fontSize: 16),),
-                TextFormField(
-                  controller: jobTitle,
-                  enabled: widget.allowEdit,
-                  decoration: const InputDecoration(
-                    border: OutlineInputBorder(),
+                Text('Job Title', style: GoogleFonts.poppins(fontSize: 12, color: PlacedColors.PrimaryGrey2, fontWeight: FontWeight.w500),),
+                const SizedBox(height: 4,),
+                SizedBox(
+                  height: 48,
+                  child: TextFormField(
+                    textAlignVertical: TextAlignVertical.center,
+                    style: GoogleFonts.poppins(fontSize: 16, fontWeight: FontWeight.w500),
+                    controller: jobTitle,
+                    enabled: widget.allowEdit,
+                    decoration: InputDecoration(
+                      filled: true,
+                      enabledBorder: OutlineInputBorder(
+                        borderSide: BorderSide(color: PlacedColors.PrimaryBlueLight1, width: 1.0),
+                      ),
+                      fillColor: PlacedColors.PrimaryBlueLight2,
+                      border: OutlineInputBorder(
+                        borderSide: BorderSide(color: PlacedColors.PrimaryBlueLight1, width: 2.0),
+                      )
+                    ),
+                    validator: (String? value) {
+                      if (value == null || value.isEmpty) {
+                        return 'Cannot have empty job title!';
+                      }
+                      return null;
+                    },
                   ),
-                  validator: (String? value) {
-                    if (value == null || value.isEmpty) {
-                      return 'Cannot have empty job title!';
-                    }
-                    return null;
-                  },
                 ),
                 const SizedBox(height: 20,),
-                Text('Company Name', style: TextStyle(fontSize: 16),),
-                TextFormField(
-                  controller: companyName,
-                  enabled: widget.allowEdit,
-                  decoration: const InputDecoration(
-                      border: OutlineInputBorder()
+                Text('Company Name', style: GoogleFonts.poppins(fontSize: 12, color: PlacedColors.PrimaryGrey2, fontWeight: FontWeight.w500),),
+                const SizedBox(height: 4,),
+                SizedBox(
+                  height: 48,
+                  child: TextFormField(
+                    controller: companyName,
+                    style: GoogleFonts.poppins(fontSize: 16, fontWeight: FontWeight.w500),
+                    enabled: widget.allowEdit,
+                    decoration: InputDecoration(
+                        filled: true,
+                        enabledBorder: OutlineInputBorder(
+                          borderSide: BorderSide(color: PlacedColors.PrimaryBlueLight1, width: 1.0),
+                        ),
+                        fillColor: PlacedColors.PrimaryBlueLight2,
+                        border: OutlineInputBorder(
+                          borderSide: BorderSide(color: PlacedColors.PrimaryBlueLight1, width: 2.0),
+                        )
+                    ),
+                    validator: (String? value) {
+                      if (value == null || value.isEmpty) {
+                        return 'Cannot have empty company name';
+                      }
+                      return null;
+                    },
                   ),
-                  validator: (String? value) {
-                    if (value == null || value.isEmpty) {
-                      return 'Cannot have empty company name';
-                    }
-                    return null;
-                  },
                 ),
                 const SizedBox(height: 20,),
-                Text('Package Range (LPA)', style: TextStyle(fontSize: 16),),
+                Text('Package Range (LPA)', style: GoogleFonts.poppins(fontSize: 12, color: PlacedColors.PrimaryGrey2, fontWeight: FontWeight.w500),),
+                const SizedBox(height: 4,),
                 Row(
                   children: [
                     Expanded(
                       child: TextFormField(
+                        style: GoogleFonts.poppins(fontSize: 16, fontWeight: FontWeight.w500),
                         enabled: widget.allowEdit,
                         controller: packageStartRange,
-                        decoration: const InputDecoration(
-                            border: OutlineInputBorder()
+                        decoration: InputDecoration(
+                            filled: true,
+                            enabledBorder: OutlineInputBorder(
+                              borderSide: BorderSide(color: PlacedColors.PrimaryBlueLight1, width: 1.0),
+                            ),
+                            fillColor: PlacedColors.PrimaryBlueLight2,
+                            border: OutlineInputBorder(
+                              borderSide: BorderSide(color: PlacedColors.PrimaryBlueLight1, width: 2.0),
+                            )
                         ),
                         validator: (String? value) {
                           if (value == null || value.isEmpty) {
@@ -160,22 +197,39 @@ class _JobDetailsDialogState extends State<JobDetailsDialog> {
                     const SizedBox(width: 10,),
                     Expanded(
                       child: TextFormField(
+                        style: GoogleFonts.poppins(fontSize: 16, fontWeight: FontWeight.w500),
                         enabled: widget.allowEdit,
                         controller: packageEndRange,
-                        decoration: const InputDecoration(
-                            border: OutlineInputBorder()
+                        decoration: InputDecoration(
+                            filled: true,
+                            enabledBorder: OutlineInputBorder(
+                              borderSide: BorderSide(color: PlacedColors.PrimaryBlueLight1, width: 1.0),
+                            ),
+                            fillColor: PlacedColors.PrimaryBlueLight2,
+                            border: OutlineInputBorder(
+                              borderSide: BorderSide(color: PlacedColors.PrimaryBlueLight1, width: 2.0),
+                            )
                         ),
                       ),
                     ),
                   ],
                 ),
                 const SizedBox(height: 20,),
-                Text('Job Type', style: TextStyle(fontSize: 16),),
+                Text('Job Type', style: GoogleFonts.poppins(fontSize: 12, color: PlacedColors.PrimaryGrey2, fontWeight: FontWeight.w500),),
+                const SizedBox(height: 4,),
                 TextFormField(
+                  style: GoogleFonts.poppins(fontSize: 16, fontWeight: FontWeight.w500),
                   controller: jobType,
                   enabled: widget.allowEdit,
-                  decoration: const InputDecoration(
-                      border: OutlineInputBorder()
+                  decoration: InputDecoration(
+                      filled: true,
+                      enabledBorder: OutlineInputBorder(
+                        borderSide: BorderSide(color: PlacedColors.PrimaryBlueLight1, width: 1.0),
+                      ),
+                      fillColor: PlacedColors.PrimaryBlueLight2,
+                      border: OutlineInputBorder(
+                        borderSide: BorderSide(color: PlacedColors.PrimaryBlueLight1, width: 2.0),
+                      )
                   ),
                   validator: (String? value) {
                     if (value == null || value.isEmpty) {
@@ -185,12 +239,21 @@ class _JobDetailsDialogState extends State<JobDetailsDialog> {
                   },
                 ),
                 const SizedBox(height: 20,),
-                Text('Job Location', style: TextStyle(fontSize: 16),),
+                Text('Job Location', style: GoogleFonts.poppins(fontSize: 12, color: PlacedColors.PrimaryGrey2, fontWeight: FontWeight.w500),),
+                const SizedBox(height: 4,),
                 TextFormField(
+                  style: GoogleFonts.poppins(fontSize: 16, fontWeight: FontWeight.w500),
                   controller: jobLocation,
                   enabled: widget.allowEdit,
-                  decoration: const InputDecoration(
-                      border: OutlineInputBorder()
+                  decoration: InputDecoration(
+                      filled: true,
+                      enabledBorder: OutlineInputBorder(
+                        borderSide: BorderSide(color: PlacedColors.PrimaryBlueLight1, width: 1.0),
+                      ),
+                      fillColor: PlacedColors.PrimaryBlueLight2,
+                      border: OutlineInputBorder(
+                        borderSide: BorderSide(color: PlacedColors.PrimaryBlueLight1, width: 2.0),
+                      )
                   ),
                   validator: (String? value) {
                     if (value == null || value.isEmpty) {
@@ -200,12 +263,21 @@ class _JobDetailsDialogState extends State<JobDetailsDialog> {
                   },
                 ),
                 const SizedBox(height: 20,),
-                Text('Last date to Apply', style: TextStyle(fontSize: 16),),
+                Text('Last date to Apply', style: GoogleFonts.poppins(fontSize: 12, color: PlacedColors.PrimaryGrey2, fontWeight: FontWeight.w500),),
+                const SizedBox(height: 4,),
                 TextFormField(
+                  style: GoogleFonts.poppins(fontSize: 16, fontWeight: FontWeight.w500),
                   controller: lastDateToApply,
                   enabled: widget.allowEdit,
-                  decoration: const InputDecoration(
-                      border: OutlineInputBorder()
+                  decoration: InputDecoration(
+                      filled: true,
+                      enabledBorder: OutlineInputBorder(
+                        borderSide: BorderSide(color: PlacedColors.PrimaryBlueLight1, width: 1.0),
+                      ),
+                      fillColor: PlacedColors.PrimaryBlueLight2,
+                      border: OutlineInputBorder(
+                        borderSide: BorderSide(color: PlacedColors.PrimaryBlueLight1, width: 2.0),
+                      )
                   ),
                   validator: (String? value) {
                     if (value == null || value.isEmpty) {
@@ -268,11 +340,14 @@ class _JobDetailsDialogState extends State<JobDetailsDialog> {
                   },
                   child: widget.allowEdit ? Container(
                     height: 50,
-                    color: Colors.blue,
+                    decoration: BoxDecoration(
+                      color: Colors.blue,
+                      borderRadius: BorderRadius.circular(8.0)
+                    ),
                     child: Center(
-                        child: Text('Save', style: TextStyle(color: Colors
+                        child: Text('Update', style: GoogleFonts.poppins(color: Colors
                             .white,
-                            fontWeight: FontWeight.bold,
+                            fontWeight: FontWeight.w600,
                             fontSize: 18),)),
                   ) : Container(),
                 )

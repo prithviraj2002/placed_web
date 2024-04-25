@@ -70,6 +70,7 @@ class _JobDetailsState extends State<JobDetails> {
         body: Obx(() {
           return controller.profiles.isNotEmpty
               ? Container(
+            color: PlacedColors.PrimaryWhiteDark,
             padding: const EdgeInsets.symmetric(vertical: 20, horizontal: 20),
             child: SingleChildScrollView(
               child: Column(
@@ -86,136 +87,148 @@ class _JobDetailsState extends State<JobDetails> {
                     ],
                   ),
                   const SizedBox(height: 20,),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: <Widget>[
-                      Container(
-                        height: 40,
-                        width: 240,
-                        decoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(5),
-                          color: Colors.black12,
-                        ),
-                        child: Center(
-                          child: CustomTextFieldForm(
-                            hintText: '🔍 Search table',
-                            textInputType: TextInputType.text
-                            ,
-                            ontap: _onSearchTextChanged,
-                          ),
-                        ),
-                      ),
-                      InkWell(
-                        onTap: () {
-                          controller.exportToExcel(widget.jobPost.companyName);
-                        },
-                        child: Container(
-                          height: 40,
-                          width: 130,
-                          padding: const EdgeInsets.all(4),
-                          decoration: BoxDecoration(
-                              border: Border.all(
-                                  color: PlacedColors.PrimaryBlueMain),
-                              borderRadius: BorderRadius.circular(5)),
-                          child: Row(
-                            children: [
-                              SvgPicture.asset(
-                                'assets/Export.svg',
-                                color: PlacedColors.PrimaryBlueMain,
-                                height: PlacedDimens.icon_size,
-                                width: PlacedDimens.icon_size,
+                  Container(
+                    padding: EdgeInsets.fromLTRB(16,16,16,0),
+                    height: MediaQuery.of(context).size.height,
+                    decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(20),
+                    color: PlacedColors.PrimaryWhite,),
+                    child: Column(
+                      children: [
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: <Widget>[
+                            Container(
+                              height: 40,
+                              width: 240,
+                              decoration: BoxDecoration(
+                                borderRadius: BorderRadius.circular(5),
+                                color: Colors.black12,
                               ),
-                              SizedBox(width: 8,),
-                              Text(
-                                PlacedStrings.exportSheet,
-                                style: TextStyle(
-                                    color: PlacedColors.PrimaryBlueMain),
+                              child: Center(
+                                child: CustomTextFieldForm(
+                                  hintText: '🔍 Search table',
+                                  textInputType: TextInputType.text
+                                  ,
+                                  ontap: _onSearchTextChanged,
+                                ),
                               ),
-                            ],
-                          ),
-                        ),
-                      ),
-                    ],
-                  ),
-                  const SizedBox(height: 20,),
-                  SingleChildScrollView(
-                    scrollDirection: Axis.vertical,
-                    child: SingleChildScrollView(
-                      scrollDirection: Axis.horizontal,
-                      child: Obx(() {
-                        return DataTable(
-                            sortColumnIndex: 2,
-                            sortAscending: isAscending,
-                            dividerThickness: 0.00000000001,
-                            columns: [
-                              DataColumn(label: Text('SR.NO')),
-                              DataColumn(label: Text('Profile')),
-                              DataColumn(label: Text('Name'), onSort: sortName),
-                              DataColumn(label: Text('Email')),
-                              DataColumn(label: Text('Date of Birth')),
-                              DataColumn(label: Text('IU')),
-                              DataColumn(label: Text('Phone Number')),
-                              DataColumn(label: Text('Course')),
-                              DataColumn(label: Text('Degree')),
-                              DataColumn(label: Text('Year')),
-                              DataColumn(label: Text('Semester')),
-                              DataColumn(label: Text('Resume'))
-                            ],
-                            rows: List.generate(filteredData.length, (index) {
-                              final profile = filteredData[index];
-                              return DataRow(
-                                  cells: [
-                                    DataCell(Text('${index + 1}')),
-                                    DataCell(
-                                        Container(
-                                          decoration: BoxDecoration(
-                                              border: Border.all(color: Colors.grey),
-                                              shape: BoxShape.circle
-                                          ),
-                                          child: CircleAvatar(
-                                            radius: 50, // Adjust the radius as needed
-                                            backgroundColor: Colors.transparent, // Make the background transparent
-                                            backgroundImage: NetworkImage(AppwriteStorage.getImageViewUrl(profile.id), scale: 10, ),
-                                          ),
-                                        )
+                            ),
+                            InkWell(
+                              onTap: () {
+                                controller.exportToExcel(widget.jobPost.companyName);
+                              },
+                              child: Container(
+                                height: 40,
+                                width: 130,
+                                padding: const EdgeInsets.all(4),
+                                decoration: BoxDecoration(
+                                    border: Border.all(
+                                        color: PlacedColors.PrimaryBlueMain),
+                                    borderRadius: BorderRadius.circular(5)),
+                                child: Row(
+                                  children: [
+                                    SvgPicture.asset(
+                                      'assets/Export.svg',
+                                      color: PlacedColors.PrimaryBlueMain,
+                                      height: PlacedDimens.icon_size,
+                                      width: PlacedDimens.icon_size,
                                     ),
-                                    DataCell(TextButton(
-                                      onPressed: () {
-                                        if (!drawerKey.currentState!
-                                            .isEndDrawerOpen) {
-                                          controller.selectedProfile.value =
-                                              profile;
-                                          drawerKey.currentState!
-                                              .openEndDrawer();
-                                        }
-                                        else {
-                                          drawerKey.currentState!
-                                              .closeEndDrawer();
-                                        }
-                                      },
-                                      child: Text(profile.name, style: TextStyle(color: profile.status ? PlacedColors.PrimaryBlueMain : PlacedColors.SecondaryRed),),
-                                    )),
-                                    DataCell(Text(profile.email)),
-                                    DataCell(Text(profile.dateOfBirth)),
-                                    DataCell(Text(profile.IU)),
-                                    DataCell(Text(profile.phoneNumber)),
-                                    DataCell(Text(profile.course)),
-                                    DataCell(Text(profile.degree)),
-                                    DataCell(Text(profile.year.toString())),
-                                    DataCell(Text(profile.sem.toString())),
-                                    DataCell(
-                                        TextButton(
+                                    SizedBox(width: 8,),
+                                    Text(
+                                      PlacedStrings.exportSheet,
+                                      style: TextStyle(
+                                          color: PlacedColors.PrimaryBlueMain),
+                                    ),
+                                  ],
+                                ),
+                              ),
+                            ),
+                          ],
+                        ),
+                        const SizedBox(height: 20,),
+                        SingleChildScrollView(
+                          scrollDirection: Axis.vertical,
+                          child: SingleChildScrollView(
+                            scrollDirection: Axis.horizontal,
+                            child: Obx(() {
+                              return DataTable(
+                                  border: TableBorder(horizontalInside: BorderSide(color: PlacedColors.PrimaryWhiteDark)),
+                                  sortColumnIndex: 2,
+                                  sortAscending: isAscending,
+                                  dividerThickness: 0.00000000001,
+                                  columns: [
+                                    DataColumn(label: Text('SR.NO')),
+                                    DataColumn(label: Text('Profile')),
+                                    DataColumn(label: Text('Name'), onSort: sortName),
+                                    DataColumn(label: Text('Email')),
+                                    DataColumn(label: Text('Date of Birth')),
+                                    DataColumn(label: Text('IU')),
+                                    DataColumn(label: Text('Phone Number')),
+                                    DataColumn(label: Text('Course')),
+                                    DataColumn(label: Text('Degree')),
+                                    DataColumn(label: Text('Year')),
+                                    DataColumn(label: Text('Semester')),
+                                    DataColumn(label: Text('Resume'))
+                                  ],
+                                  rows: List.generate(filteredData.length, (index) {
+                                    final profile = filteredData[index];
+                                    return DataRow(
+                                        cells: [
+                                          DataCell(Text('${index + 1}')),
+                                          DataCell(
+                                              Container(
+                                                decoration: BoxDecoration(
+                                                    border: Border.all(color: Colors.grey),
+                                                    shape: BoxShape.circle
+                                                ),
+                                                child: CircleAvatar(
+                                                  radius: 50, // Adjust the radius as needed
+                                                  backgroundColor: Colors.transparent, // Make the background transparent
+                                                  backgroundImage: NetworkImage(AppwriteStorage.getImageViewUrl(profile.id), scale: 10, ),
+                                                ),
+                                              )
+                                          ),
+                                          DataCell(TextButton(
                                             onPressed: () {
-                                              final Uri _url = Uri.parse(AppwriteStorage.getResumeViewUrl(profile.id));
-                                              launchUrl(_url);
+                                              if (!drawerKey.currentState!
+                                                  .isEndDrawerOpen) {
+                                                controller.selectedProfile.value =
+                                                    profile;
+                                                drawerKey.currentState!
+                                                    .openEndDrawer();
+                                              }
+                                              else {
+                                                drawerKey.currentState!
+                                                    .closeEndDrawer();
+                                              }
                                             },
-                                            child: const Text('View resume')
-                                        )
-                                    )
-                                  ]);
-                            })
-                        );
-                      }),
+                                            child: Text(profile.name, style: TextStyle(color: profile.status ? PlacedColors.PrimaryBlueMain : PlacedColors.SecondaryRed),),
+                                          )),
+                                          DataCell(Text(profile.email)),
+                                          DataCell(Text(profile.dateOfBirth)),
+                                          DataCell(Text(profile.IU)),
+                                          DataCell(Text(profile.phoneNumber)),
+                                          DataCell(Text(profile.course)),
+                                          DataCell(Text(profile.degree)),
+                                          DataCell(Text(profile.year.toString())),
+                                          DataCell(Text(profile.sem.toString())),
+                                          DataCell(
+                                              TextButton(
+                                                  onPressed: () {
+                                                    final Uri _url = Uri.parse(AppwriteStorage.getResumeViewUrl(profile.id));
+                                                    launchUrl(_url);
+                                                  },
+                                                  child: const Text('View resume')
+                                              )
+                                          )
+                                        ]);
+                                  })
+                              );
+                            }),
+                          ),
+                        ),
+                      ],
                     ),
                   ),
                 ],

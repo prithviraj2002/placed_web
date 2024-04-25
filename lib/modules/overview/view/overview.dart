@@ -3,6 +3,7 @@ import 'dart:async';
 import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:placed_web/appwrite/appwrite_db/appwrite_db.dart';
 import 'package:placed_web/appwrite/storage/storage.dart';
 import 'package:placed_web/constants/app-ui/placed_colors.dart';
@@ -38,7 +39,7 @@ class _OverviewState extends State<Overview> {
               ),
               Text(
                 'Overview',
-                style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
+                style: GoogleFonts.poppins(fontSize: 24, fontWeight: FontWeight.bold),
               ),
               const SizedBox(
                 height: 20,
@@ -49,26 +50,30 @@ class _OverviewState extends State<Overview> {
                 children: <Widget>[
                   Container(
                     height: 92,
-                    width: 172,
+                    width: 178,
                     padding:
-                    const EdgeInsets.symmetric(horizontal: 4, vertical: 4),
+                    const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
                     decoration: BoxDecoration(
-                        color: Color(0XFF2D64FA),
+                        color: const Color(0XFF2D64FA),
                         borderRadius: BorderRadius.circular(16)),
                     child: Column(
+                      mainAxisSize: MainAxisSize.max,
+                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                       children: <Widget>[
-                        Text(
-                          'Students enrolled',
-                          style: TextStyle(
-                              color: PlacedColors.PrimaryWhite, fontSize: 20),
+                        Expanded(
+                          child: Text(
+                            'Students enrolled',
+                            style: GoogleFonts.poppins(
+                                color: PlacedColors.PrimaryWhite, fontSize: 16),
+                          ),
                         ),
-                        Expanded(child: Obx(() {
+                        Obx(() {
                           return Text(
                             overviewController.profiles.length.toString(),
-                            style: TextStyle(
-                                color: PlacedColors.PrimaryWhite, fontSize: 32),
+                            style: GoogleFonts.poppins(
+                                color: PlacedColors.PrimaryWhite, fontSize: 28, fontWeight: FontWeight.bold),
                           );
-                        }))
+                        })
                       ],
                     ),
                   ),
@@ -77,24 +82,28 @@ class _OverviewState extends State<Overview> {
                   ),
                   Container(
                     height: 92,
-                    width: 222,
+                    width: 242,
                     padding:
-                    const EdgeInsets.symmetric(horizontal: 4, vertical: 4),
+                    const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
                     decoration: BoxDecoration(
-                        color: Color(0XFF2D64FA),
+                        color: const Color(0XFF2D64FA),
                         borderRadius: BorderRadius.circular(16)),
                     child: Column(
+                      mainAxisSize: MainAxisSize.max,
+                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                       children: <Widget>[
-                        Text(
-                          'Companies Onboarded',
-                          style: TextStyle(
-                              color: PlacedColors.PrimaryWhite, fontSize: 20),
+                        Expanded(
+                          child: Text(
+                            'Companies Onboarded',
+                            style: GoogleFonts.poppins(
+                                color: PlacedColors.PrimaryWhite, fontSize: 16, fontWeight: FontWeight.normal),
+                          ),
                         ),
                         Expanded(child: Obx(() {
                           return Text(
                             overviewController.jobs.length.toString(),
-                            style: TextStyle(
-                                color: PlacedColors.PrimaryWhite, fontSize: 32),
+                            style: GoogleFonts.poppins(
+                                color: PlacedColors.PrimaryWhite, fontSize: 28, fontWeight: FontWeight.bold),
                           );
                         }))
                       ],
@@ -105,25 +114,28 @@ class _OverviewState extends State<Overview> {
                   ),
                   Container(
                     height: 92,
-                    width: 232,
+                    width: 242,
                     padding:
-                    const EdgeInsets.symmetric(horizontal: 4, vertical: 4),
+                    const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
                     decoration: BoxDecoration(
-                        color: Color(0XFF2D64FA),
+                        color: const Color(0XFF2D64FA),
                         borderRadius: BorderRadius.circular(16)),
                     child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
+                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                      mainAxisSize: MainAxisSize.max,
                       children: <Widget>[
-                        Text(
-                          'Highest Package Offered',
-                          style: TextStyle(
-                              color: PlacedColors.PrimaryWhite, fontSize: 18),
+                        Expanded(
+                          child: Text(
+                            'Highest Package Offered',
+                            style: GoogleFonts.poppins(
+                                color: PlacedColors.PrimaryWhite, fontSize: 16, fontWeight: FontWeight.normal),
+                          ),
                         ),
                         Expanded(child: Obx(() {
                           return Text(
                             '${overviewController.highestPackageOffered.value.toString()} LPA',
-                            style: TextStyle(
-                                color: PlacedColors.PrimaryWhite, fontSize: 32),
+                            style: GoogleFonts.poppins(
+                                color: PlacedColors.PrimaryWhite, fontSize: 28, fontWeight: FontWeight.bold),
                           );
                         }))
                       ],
@@ -136,19 +148,22 @@ class _OverviewState extends State<Overview> {
               ),
               Row(
                 children: <Widget>[
-                  Container(
-                    height: 280,
-                    width: 196,
-                    padding:
-                    const EdgeInsets.symmetric(horizontal: 4, vertical: 4),
-                    child: Card(
-                      surfaceTintColor: PlacedColors.PrimaryWhite,
+                  Card(
+                    margin: const EdgeInsets.only(left: 16),
+                    surfaceTintColor: PlacedColors.PrimaryWhite,
+                    child: Container(
+                      height: 280,
+                      width: 196,
+                      padding:
+                      const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
                       child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
                         children: <Widget>[
+                          const SizedBox(height: 24,),
                           Text(
                             'Top Recruiter',
-                            style: TextStyle(
-                                fontSize: 20, fontWeight: FontWeight.bold),
+                            style: GoogleFonts.poppins(
+                                fontSize: 20, fontWeight: FontWeight.w700),
                           ),
                           Expanded(
                             child: Obx(() {
@@ -183,20 +198,24 @@ class _OverviewState extends State<Overview> {
                   const SizedBox(
                     width: 10,
                   ),
-                  Container(
-                    height: 280,
-                    width: 388,
-                    padding:
-                    const EdgeInsets.symmetric(horizontal: 4, vertical: 4),
-                    child: Card(
-                      surfaceTintColor: PlacedColors.PrimaryWhite,
+                  Card(
+                    margin: const EdgeInsets.only(left: 16),
+                    surfaceTintColor: PlacedColors.PrimaryWhite,
+                    child: Container(
+                      height: 280,
+                      width: 388,
+                      padding:
+                      const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
                       child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
                         children: <Widget>[
+                          const SizedBox(height: 24,),
                           Text(
                             'Students by Department',
-                            style: TextStyle(
-                                fontSize: 20, fontWeight: FontWeight.bold),
+                            style: GoogleFonts.poppins(
+                                fontSize: 20, fontWeight: FontWeight.w700),
                           ),
+                          const SizedBox(height: 10,),
                           FutureBuilder(
                               future: overviewController
                                   .getDepartmentWiseProfiles(),
@@ -217,11 +236,13 @@ class _OverviewState extends State<Overview> {
                                     children: [
                                       Expanded(
                                         child: SizedBox(
-                                            height: 132,
-                                            width: 132,
-                                            child: PieChart(PieChartData(
+                                            height: 122,
+                                            width: 122,
+                                            child: PieChart(
+                                                PieChartData(
                                               centerSpaceRadius:
-                                              double.infinity,
+                                              30,
+                                              sectionsSpace: 4,
                                               sections: [
                                                 PieChartSectionData(
                                                   showTitle: false,
@@ -267,7 +288,7 @@ class _OverviewState extends State<Overview> {
                                                         .PieChartYellow,
                                                     shape: BoxShape.circle),
                                               ),
-                                              title: Text('CSE'),
+                                              title: const Text('CSE'),
                                             ),
                                             ListTile(
                                               leading: Container(
@@ -278,7 +299,7 @@ class _OverviewState extends State<Overview> {
                                                         .PieChartBlue,
                                                     shape: BoxShape.circle),
                                               ),
-                                              title: Text('CE'),
+                                              title: const Text('CE'),
                                             ),
                                             ListTile(
                                               leading: Container(
@@ -289,7 +310,7 @@ class _OverviewState extends State<Overview> {
                                                         .PieChartLightBlue,
                                                     shape: BoxShape.circle),
                                               ),
-                                              title: Text('IT'),
+                                              title: const Text('IT'),
                                             ),
                                             ListTile(
                                               leading: Container(
@@ -300,7 +321,7 @@ class _OverviewState extends State<Overview> {
                                                         .PieChartOrange,
                                                     shape: BoxShape.circle),
                                               ),
-                                              title: Text('Others'),
+                                              title: const Text('Others'),
                                             ),
                                           ],
                                         ),
@@ -326,19 +347,22 @@ class _OverviewState extends State<Overview> {
                   const SizedBox(
                     width: 10,
                   ),
-                  Container(
-                    height: 280,
-                    width: 388,
-                    padding:
-                    const EdgeInsets.symmetric(horizontal: 4, vertical: 4),
-                    child: Card(
-                      surfaceTintColor: PlacedColors.PrimaryWhite,
+                  Card(
+                    margin: const EdgeInsets.only(left: 16),
+                    surfaceTintColor: PlacedColors.PrimaryWhite,
+                    child: Container(
+                      height: 280,
+                      width: 358,
+                      padding:
+                      const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
                       child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
                         children: <Widget>[
+                          const SizedBox(height: 24,),
                           Text(
                             'Positions Offered',
-                            style: TextStyle(
-                                fontSize: 20, fontWeight: FontWeight.bold),
+                            style: GoogleFonts.poppins(
+                                fontSize: 20, fontWeight: FontWeight.w700),
                           ),
                           FutureBuilder(
                               future: overviewController.getJobRoles(),
@@ -365,7 +389,8 @@ class _OverviewState extends State<Overview> {
                                           width: 132,
                                           child: PieChart(PieChartData(
                                               centerSpaceRadius:
-                                              double.infinity,
+                                              30,
+                                              sectionsSpace: 4,
                                               sections: List.generate(
                                                   jobRoleKeys.length,
                                                       (index) => PieChartSectionData(
@@ -419,20 +444,22 @@ class _OverviewState extends State<Overview> {
                 height: 20,
               ),
               Container(
-                height: 434,
-                width: 331,
-                padding: const EdgeInsets.symmetric(vertical: 4, horizontal: 4),
+                margin: const EdgeInsets.only(left: 16),
+                height: 334,
+                width: MediaQuery.of(context).size.width * 0.8,
+                padding: const EdgeInsets.symmetric(vertical: 24, horizontal: 16),
                 decoration: BoxDecoration(
                     color: PlacedColors.PrimaryWhite,
                     borderRadius: BorderRadius.circular(16)),
                 child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
                   children: <Widget>[
-                    const Text(
+                    Text(
                       'Students per job post',
-                      style: TextStyle(fontSize: 20),
+                      style: GoogleFonts.poppins(fontSize: 16, fontWeight: FontWeight.w700),
                     ),
                     const SizedBox(
-                      height: 16,
+                      height: 32,
                     ),
                     Expanded(
                         child: FutureBuilder(
@@ -443,12 +470,15 @@ class _OverviewState extends State<Overview> {
                                 Map<String, int> studentsPerJob = snapshot.data;
                                 return BarChart(
                                     BarChartData(
-                                        gridData: const FlGridData(show: true, drawHorizontalLine: true, drawVerticalLine: false),
+                                        gridData: const FlGridData(
+                                            show: true, drawHorizontalLine: true,
+                                            drawVerticalLine: false,
+                                        ),
                                         titlesData: FlTitlesData(
-                                          rightTitles: AxisTitles(
+                                          rightTitles: const AxisTitles(
                                               sideTitles:
                                               SideTitles(showTitles: false)),
-                                          topTitles: AxisTitles(
+                                          topTitles: const AxisTitles(
                                               sideTitles:
                                               SideTitles(showTitles: false)),
                                           bottomTitles: AxisTitles(
@@ -460,9 +490,9 @@ class _OverviewState extends State<Overview> {
                                               )),
                                         ),
                                         borderData: FlBorderData(
-                                          border: const Border(
-                                              bottom: BorderSide(),
-                                              left: BorderSide()),
+                                          border: Border(
+                                              bottom: BorderSide(color: const Color(0xffc4c4c4).withOpacity(0.7)),
+                                              ),
                                         ),
                                         barGroups: List.generate(
                                             studentsPerJob.keys.length,
@@ -472,7 +502,11 @@ class _OverviewState extends State<Overview> {
                                                   BarChartRodData(
                                                       toY: studentsPerJob.values
                                                           .toList()[index] *
-                                                          1.0)
+                                                          1,
+                                                    width: 40,
+                                                    borderRadius: BorderRadius.circular(5.0),
+                                                    color: PlacedColors.pieChartColors[index]
+                                                  )
                                                 ]))));
                               } else if (snapshot.hasError) {
                                 return const Center(

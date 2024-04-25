@@ -59,7 +59,7 @@ class _HomeState extends State<Home> {
         children: <Widget>[
           Container(
             height: double.infinity,
-            padding: const EdgeInsets.symmetric(horizontal: 10),
+            padding: const EdgeInsets.symmetric(horizontal: 8),
             width: 237,
             color: PlacedColors.PrimaryBlueMain,
             child:
@@ -133,24 +133,53 @@ class _HomeState extends State<Home> {
                         onTap: (){
                           updateWidget(2);
                         },
-                        child: CustomRow(
-                          leadingImage: 'assets/Office_Building.svg',
-                          title: PlacedStrings.Drives,
-                          color: selectedIndex == 2
-                              ? PlacedColors.PrimaryWhite.withOpacity(0.20)
-                              : PlacedColors.PrimaryWhite.withOpacity(0.0),
+                        child: Container(
+                          padding: EdgeInsets.symmetric(vertical: 8, horizontal: 20),
+                          height: 40,
+                          width: 221,
+                          decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(8),
+                            color: selectedIndex == 2
+                                ? PlacedColors.PrimaryWhite.withOpacity(0.20)
+                                : PlacedColors.PrimaryWhite.withOpacity(0.0),
+                          ),
+
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              Row(
+                                children: [
+                                  SvgPicture.asset(
+                                    'assets/Office_Building.svg',
+                                    color: PlacedColors.PrimaryWhite,
+                                    height: PlacedDimens.icon_size,
+                                    width: PlacedDimens.icon_size,
+                                  ),
+                                  SizedBox(width: 8,),
+                                  Text(
+                                    PlacedStrings.Drives,
+                                    style: GoogleFonts.poppins(
+                                        color: PlacedColors.PrimaryWhite,
+                                        fontWeight: FontWeight.w600,
+                                        fontSize: 16),
+                                  ),
+                                ],
+                              ),
+                              Icon(Icons.arrow_forward_ios_rounded,color: PlacedColors.PrimaryWhite,size: 16,)
+                            ],
+                          ),
                         ),
                       ),
-                  SizedBox(
-                    height: 25,
-                  ),
-                  Text(
-                    'TASKS',
-                    style: GoogleFonts.lato(
-                        color: const Color(0xffe9e9e9),
-                        fontWeight: FontWeight.w600,
-                        fontSize: 12),
-                  ),
+                      SizedBox(
+                        height: 25,
+                      ),
+                      Text(
+                        'TASKS',
+                        style: GoogleFonts.lato(
+                            color: const Color(0xffe9e9e9),
+                            fontWeight: FontWeight.w600,
+                            fontSize: 12),
+                      ),
                       SizedBox(
                         height: 8,
                       ),
@@ -186,3 +215,4 @@ class _HomeState extends State<Home> {
     );
   }
 }
+
