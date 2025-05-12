@@ -1,5 +1,9 @@
 # placed_web
 
+
+<img width="1728" alt="MacBook Pro 16_ - 5" src="https://github.com/user-attachments/assets/a5ff7691-5cf7-4b1d-acab-d03617a9ac55" />
+
+
 Admin dashboard for placed mobile app
 
 This dashboard allows the department faculties to create job drives in real-time. It also facilitates data collection of students in tabular form along with updation rights. It also visualizes data in graphs and charts. Information of all the students, along with the information of a particular job drive can be exported in excel.
